@@ -1,4 +1,4 @@
 SoldraChess
 ===========
 
-Chess variants gameclient and framework
+Chess variants gameclient
