@@ -24,10 +24,44 @@
 
 package Networking;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+
 /**
  *
  * @author Dries
  */
 public class Client {
+    private Socket connection;
+    private ObjectOutputStream oos;
+    private ObjectInputStream ois;
     
+    public Client(){
+        try{
+         connection = new Socket(InetAddress.getLocalHost().getHostName(), 1234);
+         oos = new ObjectOutputStream(connection.getOutputStream());
+         oos.flush();
+         ois = new ObjectInputStream(connection.getInputStream());
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void requestLobby(){
+        String response = null;
+        try{
+            oos.writeObject("Geeft mij nekeer de lobbylist manneken");
+            System.out.println("CLIENT: Ik wil de lobby list!");
+            do{
+                response = (String) ois.readObject();
+                System.out.println(response);
+            }while(response.equals(null));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }
