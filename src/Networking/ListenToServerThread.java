@@ -21,29 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package UI;
-
-import Networking.Client;
-import javafx.application.Application;
-import javafx.stage.Stage;
+package Networking;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author Dries
+ * @author Geerard
  */
-public class SoldraChess extends Application {
+public class ListenToServerThread extends Thread {
 
-    @Override
-    public void start(Stage stage) {
-        Client client = new Client();
-        client.connectWithRandomName();
-        client.requestLobby();
-        setUserAgentStylesheet(STYLESHEET_MODENA);
-        new GUI(stage);
+    ObjectInputStream ois;
+
+    ListenToServerThread(ObjectInputStream ois) {
+        this.ois = ois;
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    public void run() {
+        while (true) {
+            try {
+                Object incoming = ois.readObject();
+                //int echt nu deze toevoegen aan de eventthread ofzo denk ik. tijdelijk
+                if (incoming instanceof LobbyMessage) {
+                    System.out.println("Lobbylist: ");
+                    for (String name : ((LobbyMessage) incoming).getUsernames()) {
+                        System.out.println(name);
+                    }
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(ListenToServerThread.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ListenToServerThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
-
 }

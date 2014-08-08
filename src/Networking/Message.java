@@ -21,29 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package UI;
-
-import Networking.Client;
-import javafx.application.Application;
-import javafx.stage.Stage;
+package Networking;
+import java.io.Serializable;
 
 /**
  *
- * @author Dries
+ * @author Geerard
  */
-public class SoldraChess extends Application {
-
-    @Override
-    public void start(Stage stage) {
-        Client client = new Client();
-        client.connectWithRandomName();
-        client.requestLobby();
-        setUserAgentStylesheet(STYLESHEET_MODENA);
-        new GUI(stage);
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
+public interface Message extends Serializable {
 
 }

@@ -21,29 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package UI;
-
-import Networking.Client;
-import javafx.application.Application;
-import javafx.stage.Stage;
+package Networking;
 
 /**
  *
- * @author Dries
+ * @author Geerard
  */
-public class SoldraChess extends Application {
+public class ConnectMessage implements Message {
+    private String username;
 
-    @Override
-    public void start(Stage stage) {
-        Client client = new Client();
-        client.connectWithRandomName();
-        client.requestLobby();
-        setUserAgentStylesheet(STYLESHEET_MODENA);
-        new GUI(stage);
+    public ConnectMessage(String username) {
+        this.username = username;
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    public String getUsername() {
+        return username;
     }
 
 }

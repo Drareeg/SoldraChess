@@ -23,10 +23,14 @@
  */
 package Networking;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -44,23 +48,30 @@ public class Client {
             oos = new ObjectOutputStream(connection.getOutputStream());
             oos.flush();
             ois = new ObjectInputStream(connection.getInputStream());
+            new ListenToServerThread(ois).start();
+            System.out.println("client now connected and listening to servermessages");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void requestLobby() {
-        String response = null;
         try {
-            oos.writeObject(new Object[]{Request.LOBBY_LIST_REQUEST, this.hashCode()});
-            System.out.println("CLIENT: Ik wil de lobby list!");
-            do {
-                response = (String) ois.readObject();
-                System.out.println("Server: " + response);
-                System.out.println("Client: Thanks server, You da real MVP!");
-            } while (response.equals(null));
-        } catch (Exception e) {
-            e.printStackTrace();
+            //te lui om een apparte requestlobbymessage te maken atm.
+            oos.writeObject(new LobbyMessage(null));
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void connectWithRandomName() {
+        Random r = new Random();
+        try {
+            oos.writeObject(new ConnectMessage("Username" + r.nextInt(666)));
+            oos.flush();
+            System.out.println("sent connectmessage");
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
