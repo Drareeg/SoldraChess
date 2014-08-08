@@ -54,7 +54,7 @@ public class Client {
         String response = null;
         try{
             oos.writeObject("Geeft mij nekeer de lobbylist manneken");
-            System.out.println("CLIENT: Ik wil de lobby list!");
+            System.out.println("Client: Ik wil de lobby list!");
             do{
                 response = (String) ois.readObject();
                 System.out.println("Server: "+response);
