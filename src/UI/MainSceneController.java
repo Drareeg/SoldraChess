@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Dries Weyme.
+ * Copyright 2014 Dries Weyme & Geerard Ponnet.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package UI;
 
 import java.net.URL;
@@ -34,14 +33,14 @@ import javafx.scene.control.Label;
  *
  * @author Dries
  */
-public class MainSceneController implements Initializable{
+public class MainSceneController implements Initializable {
 
     @FXML
     private Label label;
-    
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         label.setText("Client");
     }
-    
+
 }
