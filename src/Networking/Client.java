@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package Networking;
 
 import java.io.ObjectInputStream;
@@ -37,31 +36,29 @@ public class Client {
     private Socket connection;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
-    
-    public Client(){
-        try{
-         connection = new Socket(InetAddress.getLocalHost().getHostName(), 1234);
-         oos = new ObjectOutputStream(connection.getOutputStream());
-         oos.flush();
-         ois = new ObjectInputStream(connection.getInputStream());
-        }
-        catch(Exception e){
+
+    public Client() {
+        try {
+            connection = new Socket(InetAddress.getLocalHost().getHostName(), 1234);
+            oos = new ObjectOutputStream(connection.getOutputStream());
+            oos.flush();
+            ois = new ObjectInputStream(connection.getInputStream());
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void requestLobby(){
+    public void requestLobby() {
         String response = null;
-        try{
+        try {
             oos.writeObject("Geeft mij nekeer de lobbylist manneken");
             System.out.println("CLIENT: Ik wil de lobby list!");
-            do{
+            do {
                 response = (String) ois.readObject();
-                System.out.println("Server: "+response);
-                System.out.println("Client: Thanks server!");
-            }while(response.equals(null));
-        }
-        catch(Exception e){
+                System.out.println("Server: " + response);
+                System.out.println("Client: Thanks server, You da real MVP!");
+            } while (response.equals(null));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
