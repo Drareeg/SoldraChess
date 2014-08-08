@@ -57,7 +57,8 @@ public class Client {
             System.out.println("CLIENT: Ik wil de lobby list!");
             do{
                 response = (String) ois.readObject();
-                System.out.println(response);
+                System.out.println("Server: "+response);
+                System.out.println("Client: Thanks server!");
             }while(response.equals(null));
         }
         catch(Exception e){
