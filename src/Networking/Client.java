@@ -23,6 +23,7 @@
  */
 package Networking;
 
+import Shared.Networking.JoinLobbyMessage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -43,33 +44,22 @@ public class Client {
     private ObjectInputStream ois;
 
     public Client() {
+
+    }
+
+    public void connectWithName(String name) {
         try {
             connection = new Socket(InetAddress.getLocalHost(), 12345);
             oos = new ObjectOutputStream(connection.getOutputStream());
             oos.flush();
             ois = new ObjectInputStream(connection.getInputStream());
             new ListenToServerThread(ois).start();
-            System.out.println("client now connected and listening to servermessages");
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void requestLobby() {
         try {
-            //te lui om een apparte requestlobbymessage te maken atm.
-            oos.writeObject(new LobbyMessage(null));
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void connectWithRandomName() {
-        Random r = new Random();
-        try {
-            oos.writeObject(new ConnectMessage("Username" + r.nextInt(666)));
+            oos.writeObject(new JoinLobbyMessage(name));
             oos.flush();
-            System.out.println("sent connectmessage");
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }

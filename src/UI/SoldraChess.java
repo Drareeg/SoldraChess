@@ -35,9 +35,6 @@ public class SoldraChess extends Application {
 
     @Override
     public void start(Stage stage) {
-        Client client = new Client();
-        client.connectWithRandomName();
-        client.requestLobby();
         setUserAgentStylesheet(STYLESHEET_MODENA);
         new GUI(stage);
     }

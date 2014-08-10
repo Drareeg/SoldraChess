@@ -22,6 +22,9 @@
  * THE SOFTWARE.
  */
 package Networking;
+
+import Shared.Networking.JoinLobbyMessage;
+import Shared.Networking.ThisIsTheLobbyMessage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.logging.Level;
@@ -44,11 +47,14 @@ public class ListenToServerThread extends Thread {
             try {
                 Object incoming = ois.readObject();
                 //int echt nu deze toevoegen aan de eventthread ofzo denk ik. tijdelijk
-                if (incoming instanceof LobbyMessage) {
+                if (incoming instanceof ThisIsTheLobbyMessage) {
                     System.out.println("Lobbylist: ");
-                    for (String name : ((LobbyMessage) incoming).getUsernames()) {
+                    for (String name : ((ThisIsTheLobbyMessage) incoming).getUsernames()) {
                         System.out.println(name);
                     }
+                }
+                if (incoming instanceof JoinLobbyMessage) {
+                    System.out.println(((JoinLobbyMessage) incoming).getUsername() + " joined");
                 }
             } catch (IOException ex) {
                 Logger.getLogger(ListenToServerThread.class.getName()).log(Level.SEVERE, null, ex);

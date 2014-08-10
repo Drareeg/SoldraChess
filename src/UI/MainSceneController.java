@@ -23,11 +23,13 @@
  */
 package UI;
 
+import Networking.Client;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 /**
  *
@@ -35,12 +37,22 @@ import javafx.scene.control.Label;
  */
 public class MainSceneController implements Initializable {
 
+    private Client client;
+
     @FXML
-    private Label label;
+    public TextField usernameField;
+
+    @FXML
+    public void connect(ActionEvent e) {
+        client.connectWithName(usernameField.getText());
+    }
+
+    public MainSceneController() {
+        client = new Client();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        label.setText("Client");
     }
 
 }
