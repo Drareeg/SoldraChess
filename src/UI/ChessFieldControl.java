@@ -23,44 +23,45 @@
  */
 package UI;
 
-import Shared.Chess.Board;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.layout.GridPane;
-
 /**
  *
  * @author Drareeg
  */
-class GameController implements Initializable, EventHandler<MouseEvent> {
+import java.io.IOException;
 
-    private Board board;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 
-    @FXML
-    public GridPane boardGrid;
+public class ChessFieldControl extends Button {
 
-    public GameController(Board board) {
-        this.board = board;
-    }
+    private int row;
+    private int col;
+    private GameController gc;
+    
+    public ChessFieldControl(int row, int col, GameController gc) {
+        this.row = row;
+        this.col = col;
+        this.gc = gc;
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("chessField.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 8; c++) {
-                ChessFieldControl cfc = new ChessFieldControl(r, c, this);
-                cfc.setOnMouseClicked(this);
-                boardGrid.add(cfc, c, r);
-            }
+        try {
+            fxmlLoader.load();
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
         }
     }
 
-    @Override
-    public void handle(Event event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
+    @FXML
+    protected void doSomething() {
+        System.out.println("The button was clicked!");
+    }
+    
+    private void onMouseClicked(MouseEvent e){
+        
+    }
 }

@@ -23,9 +23,11 @@
  */
 package UI;
 
+import Shared.Chess.Board;
 import Shared.Networking.GameStartMessage;
 import Shared.Networking.JoinLobbyMessage;
 import Shared.Networking.Message;
+import Shared.Networking.MoveMessage;
 import Shared.Networking.ThisIsTheLobbyMessage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -54,6 +56,8 @@ public class DomainEntryPoint {
     
     public ObservableList<String> userList;
 
+    private Board currentBoard;
+    
     //voorlopig alles op de javafx thread, want der zitten paar dingen tussen die de gui veranderen
     //later betere oplossing vinden.
     public void handleMessage(Message message) {
@@ -66,7 +70,12 @@ public class DomainEntryPoint {
             System.out.println("user added to list");
         }
         if(message instanceof GameStartMessage){
-            GUI.setScene(GUI.GAMESCENE, new GameController());
+            currentBoard = new Board();
+            GUI.setScene(GUI.GAMESCENE, new GameController(currentBoard));
+        }
+        if(message instanceof MoveMessage){
+            MoveMessage moveMessage = (MoveMessage) message;
+            currentBoard.movePiece(moveMessage.getFromRow(), moveMessage.getFromCol(), moveMessage.getToRow(), moveMessage.getToCol());
         }
     }
 }

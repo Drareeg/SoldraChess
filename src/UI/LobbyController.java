@@ -40,7 +40,7 @@ class LobbyController implements Initializable {
 
     @FXML
     ListView<String> userList;
-    
+
 
     DomainEntryPoint dep;
     private Client client;

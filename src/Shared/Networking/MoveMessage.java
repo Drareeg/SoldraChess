@@ -21,46 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package UI;
-
-import Shared.Chess.Board;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.layout.GridPane;
+package Shared.Networking;
 
 /**
- *
+ * C -> S: I do this move
+ * S -> C: this move was done
  * @author Drareeg
  */
-class GameController implements Initializable, EventHandler<MouseEvent> {
+public class MoveMessage extends Message {
 
-    private Board board;
+    //best ook bevatten wie hij doet, zodat server reply niet geinterpreteerd kan worden als nieuwe zet
+    private int fromRow;
+    private int fromCol;
+    private int toRow;
+    private int toCol;
 
-    @FXML
-    public GridPane boardGrid;
-
-    public GameController(Board board) {
-        this.board = board;
+    public MoveMessage(int fromRow, int fromCol, int toRow, int toCol) {
+        this.fromRow = fromRow;
+        this.fromCol = fromCol;
+        this.toRow = toRow;
+        this.toCol = toCol;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 8; c++) {
-                ChessFieldControl cfc = new ChessFieldControl(r, c, this);
-                cfc.setOnMouseClicked(this);
-                boardGrid.add(cfc, c, r);
-            }
-        }
+    public int getFromRow() {
+        return fromRow;
     }
 
-    @Override
-    public void handle(Event event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int getFromCol() {
+        return fromCol;
+    }
+
+    public int getToRow() {
+        return toRow;
+    }
+
+    public int getToCol() {
+        return toCol;
     }
 
 }

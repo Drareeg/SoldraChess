@@ -21,46 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package UI;
 
-import Shared.Chess.Board;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.layout.GridPane;
+package Shared.Chess;
 
 /**
  *
  * @author Drareeg
  */
-class GameController implements Initializable, EventHandler<MouseEvent> {
-
-    private Board board;
-
-    @FXML
-    public GridPane boardGrid;
-
-    public GameController(Board board) {
-        this.board = board;
+public class Board {
+    private ChessPiece[][] model;
+    
+    public Board(){
+        model = new ChessPiece[8][8];
+        model[0][0] = new Rook();
+        model[0][7] = new Rook();
+        model[7][0] = new Rook();
+        model[7][7] = new Rook();
     }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 8; c++) {
-                ChessFieldControl cfc = new ChessFieldControl(r, c, this);
-                cfc.setOnMouseClicked(this);
-                boardGrid.add(cfc, c, r);
-            }
-        }
+    
+    public void movePiece(int fromRow,int fromCol,int toRow,int toCol){
+        model[toRow][toCol] = model[fromRow][fromCol];
+        model[fromRow][fromCol] = null;
     }
-
-    @Override
-    public void handle(Event event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }
