@@ -24,12 +24,12 @@
 package Networking;
 
 import Shared.Networking.JoinLobbyMessage;
+import Shared.Networking.Message;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,6 +59,15 @@ public class Client {
         }
         try {
             oos.writeObject(new JoinLobbyMessage(name));
+            oos.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void sendMessage(Message message) {
+        try {
+            oos.writeObject(message);
             oos.flush();
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);

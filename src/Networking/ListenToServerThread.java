@@ -23,12 +23,13 @@
  */
 package Networking;
 
-import Shared.Networking.JoinLobbyMessage;
-import Shared.Networking.ThisIsTheLobbyMessage;
+import Shared.Networking.Message;
+import UI.DomainEntryPoint;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 
 /**
  *
@@ -43,18 +44,19 @@ public class ListenToServerThread extends Thread {
     }
 
     public void run() {
+        DomainEntryPoint dep = DomainEntryPoint.getInstance();
         while (true) {
             try {
                 Object incoming = ois.readObject();
-                //int echt nu deze toevoegen aan de eventthread ofzo denk ik. tijdelijk
-                if (incoming instanceof ThisIsTheLobbyMessage) {
-                    System.out.println("Lobbylist: ");
-                    for (String name : ((ThisIsTheLobbyMessage) incoming).getUsernames()) {
-                        System.out.println(name);
-                    }
-                }
-                if (incoming instanceof JoinLobbyMessage) {
-                    System.out.println(((JoinLobbyMessage) incoming).getUsername() + " joined");
+                if (incoming != null) {
+                    Platform.runLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            dep.handleMessage((Message) incoming);
+                        }
+                    });
+
                 }
             } catch (IOException ex) {
                 Logger.getLogger(ListenToServerThread.class.getName()).log(Level.SEVERE, null, ex);

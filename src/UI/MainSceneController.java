@@ -45,6 +45,8 @@ public class MainSceneController implements Initializable {
     @FXML
     public void connect(ActionEvent e) {
         client.connectWithName(usernameField.getText());
+        GUI.setScene(GUI.LOBBYSCENE, new LobbyController(client));
+                
     }
 
     public MainSceneController() {

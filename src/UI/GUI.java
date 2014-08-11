@@ -37,6 +37,8 @@ import javafx.stage.Stage;
 public class GUI {
 
     public static final String MAINSCENE = "MainScene.fxml";
+    public static final String LOBBYSCENE = "LobbyScene.fxml";
+    public static final String GAMESCENE = "GameScene.fxml";
 
     private final static Map<String, String> titelMap;
 

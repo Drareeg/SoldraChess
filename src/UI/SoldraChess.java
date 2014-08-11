@@ -23,7 +23,6 @@
  */
 package UI;
 
-import Networking.Client;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
