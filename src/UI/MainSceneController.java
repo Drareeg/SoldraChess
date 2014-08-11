@@ -51,6 +51,7 @@ public class MainSceneController implements Initializable {
 
     public MainSceneController() {
         client = new Client();
+        DomainEntryPoint.getInstance().setClient(client);
     }
 
     @Override

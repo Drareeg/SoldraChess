@@ -23,11 +23,11 @@
  */
 package UI;
 
+import Networking.Client;
 import Shared.Chess.Board;
+import Shared.Networking.MoveMessage;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.GridPane;
@@ -36,15 +36,17 @@ import javafx.scene.layout.GridPane;
  *
  * @author Drareeg
  */
-class GameController implements Initializable, EventHandler<MouseEvent> {
+class GameController implements Initializable {
 
     private Board board;
+    private Client client;
 
     @FXML
     public GridPane boardGrid;
 
-    public GameController(Board board) {
+    public GameController(Board board, Client client) {
         this.board = board;
+        this.client = client;
     }
 
     @Override
@@ -52,15 +54,34 @@ class GameController implements Initializable, EventHandler<MouseEvent> {
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 8; c++) {
                 ChessFieldControl cfc = new ChessFieldControl(r, c, this);
-                cfc.setOnMouseClicked(this);
+                cfc.setOnMouseClicked(cfc);
                 boardGrid.add(cfc, c, r);
             }
         }
     }
+    
+    private boolean isSomethingSelected; 
+    private int selCol;
+    private int selRow;
 
-    @Override
-    public void handle(Event event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    void clicked(int row, int col) {
+        if(!isSomethingSelected){
+            //efkes weg omdat isempty nog niet bestaat.
+            //if(!board.isEmpty(row, col)){
+                isSomethingSelected = true;
+                selCol = col;
+                selRow = row;
+            //}
+        }else{
+            if(selRow != row || selCol != col){
+                //elke illegale zet is nu nog mogelijk
+                //beter ook niet de messages vanaf hier sturen, but yeah, lazy
+                isSomethingSelected = false;
+                client.sendMessage(new MoveMessage(selRow, selCol, row, col));
+            }
+        }
     }
+
+   
 
 }

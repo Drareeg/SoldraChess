@@ -28,18 +28,19 @@ package UI;
  * @author Drareeg
  */
 import java.io.IOException;
+import javafx.event.EventHandler;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 
-public class ChessFieldControl extends Button {
+public class ChessFieldControl extends Button implements EventHandler<MouseEvent> {
 
     private int row;
     private int col;
     private GameController gc;
-    
+
     public ChessFieldControl(int row, int col, GameController gc) {
         this.row = row;
         this.col = col;
@@ -55,13 +56,8 @@ public class ChessFieldControl extends Button {
         }
     }
 
-
-    @FXML
-    protected void doSomething() {
-        System.out.println("The button was clicked!");
-    }
-    
-    private void onMouseClicked(MouseEvent e){
-        
+    @Override
+    public void handle(MouseEvent event) {
+        gc.clicked(row, col);
     }
 }

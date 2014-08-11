@@ -23,6 +23,7 @@
  */
 package UI;
 
+import Networking.Client;
 import Shared.Chess.Board;
 import Shared.Networking.GameStartMessage;
 import Shared.Networking.JoinLobbyMessage;
@@ -40,6 +41,14 @@ public class DomainEntryPoint {
 
     private static DomainEntryPoint _instance = null;
 
+    
+    private Client client;
+    
+    //om te kunnen doorgeven aan gamecontroller
+    public void setClient(Client client){
+        this.client = client;
+    }
+    
     public static DomainEntryPoint getInstance() {
         if (_instance == null) {
             _instance = new DomainEntryPoint();
@@ -71,7 +80,7 @@ public class DomainEntryPoint {
         }
         if(message instanceof GameStartMessage){
             currentBoard = new Board();
-            GUI.setScene(GUI.GAMESCENE, new GameController(currentBoard));
+            GUI.setScene(GUI.GAMESCENE, new GameController(currentBoard, client));
         }
         if(message instanceof MoveMessage){
             MoveMessage moveMessage = (MoveMessage) message;
