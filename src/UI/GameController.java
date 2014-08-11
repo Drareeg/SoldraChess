@@ -59,21 +59,22 @@ class GameController implements Initializable {
             }
         }
     }
-    
-    private boolean isSomethingSelected; 
+
+    private boolean isSomethingSelected;
     private int selCol;
     private int selRow;
 
+    @FXML
     void clicked(int row, int col) {
-        if(!isSomethingSelected){
+        if (!isSomethingSelected) {
             //efkes weg omdat isempty nog niet bestaat.
             //if(!board.isEmpty(row, col)){
-                isSomethingSelected = true;
-                selCol = col;
-                selRow = row;
+            isSomethingSelected = true;
+            selCol = col;
+            selRow = row;
             //}
-        }else{
-            if(selRow != row || selCol != col){
+        } else {
+            if (selRow != row || selCol != col) {
                 //elke illegale zet is nu nog mogelijk
                 //beter ook niet de messages vanaf hier sturen, but yeah, lazy
                 isSomethingSelected = false;
@@ -81,7 +82,5 @@ class GameController implements Initializable {
             }
         }
     }
-
-   
 
 }

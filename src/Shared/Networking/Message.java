@@ -44,4 +44,6 @@ public abstract class Message implements Serializable {
     public Socket getSource() {
         return source;
     }
+
+    public abstract void handleSelf(MessageHandler m);
 }

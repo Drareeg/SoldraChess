@@ -24,8 +24,8 @@
 package Shared.Networking;
 
 /**
- * C -> S: I do this move
- * S -> C: this move was done
+ * C -> S: I do this move S -> C: this move was done
+ *
  * @author Drareeg
  */
 public class MoveMessage extends Message {
@@ -57,6 +57,11 @@ public class MoveMessage extends Message {
 
     public int getToCol() {
         return toCol;
+    }
+
+    @Override
+    public void handleSelf(MessageHandler m) {
+        m.handleMove(this);
     }
 
 }

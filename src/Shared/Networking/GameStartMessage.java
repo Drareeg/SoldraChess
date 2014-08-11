@@ -21,13 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package Shared.Networking;
 
 /**
  * S -> C: a new game started for you
+ *
  * @author Drareeg
  */
 public class GameStartMessage extends Message {
-    
+
+    @Override
+    public void handleSelf(MessageHandler m) {
+        m.handleGameStart(this);
+    }
+
 }

@@ -25,9 +25,11 @@ package UI;
 
 import Networking.Client;
 import Shared.Chess.Board;
+import Shared.Networking.ChallengeMessage;
 import Shared.Networking.GameStartMessage;
 import Shared.Networking.JoinLobbyMessage;
 import Shared.Networking.Message;
+import Shared.Networking.MessageHandler;
 import Shared.Networking.MoveMessage;
 import Shared.Networking.ThisIsTheLobbyMessage;
 import javafx.collections.FXCollections;
@@ -37,18 +39,17 @@ import javafx.collections.ObservableList;
  *
  * @author Drareeg
  */
-public class DomainEntryPoint {
+public class DomainEntryPoint implements MessageHandler {
 
     private static DomainEntryPoint _instance = null;
 
-    
     private Client client;
-    
+
     //om te kunnen doorgeven aan gamecontroller
-    public void setClient(Client client){
+    public void setClient(Client client) {
         this.client = client;
     }
-    
+
     public static DomainEntryPoint getInstance() {
         if (_instance == null) {
             _instance = new DomainEntryPoint();
@@ -62,29 +63,42 @@ public class DomainEntryPoint {
         //tijdelijk lazy en alles gwn hierin gezet ;)
         userList = FXCollections.observableArrayList();
     }
-    
+
     public ObservableList<String> userList;
 
     private Board currentBoard;
-    
+
     //voorlopig alles op de javafx thread, want der zitten paar dingen tussen die de gui veranderen
     //later betere oplossing vinden.
     public void handleMessage(Message message) {
-        if (message instanceof ThisIsTheLobbyMessage) {
-            userList.clear();
-            userList.addAll(((ThisIsTheLobbyMessage) message).getUsernames());
-        }
-        if (message instanceof JoinLobbyMessage) {
-            userList.add(((JoinLobbyMessage) message).getUsername());
-            System.out.println("user added to list");
-        }
-        if(message instanceof GameStartMessage){
-            currentBoard = new Board();
-            GUI.setScene(GUI.GAMESCENE, new GameController(currentBoard, client));
-        }
-        if(message instanceof MoveMessage){
-            MoveMessage moveMessage = (MoveMessage) message;
-            currentBoard.movePiece(moveMessage.getFromRow(), moveMessage.getFromCol(), moveMessage.getToRow(), moveMessage.getToCol());
-        }
+        message.handleSelf(this);
+    }
+
+    @Override
+    public void handleJoinLobby(JoinLobbyMessage message) {
+        userList.add(((JoinLobbyMessage) message).getUsername());
+        System.out.println("user added to list");
+    }
+
+    @Override
+    public void handleChallenge(ChallengeMessage challengeMessage) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void handleMove(MoveMessage moveMessage) {
+        currentBoard.movePiece(moveMessage.getFromRow(), moveMessage.getFromCol(), moveMessage.getToRow(), moveMessage.getToCol());
+    }
+
+    @Override
+    public void handleGameStart(GameStartMessage gameStart) {
+        currentBoard = new Board();
+        GUI.setScene(GUI.GAMESCENE, new GameController(currentBoard, client));
+    }
+
+    @Override
+    public void handleThisIsTheLobbyMessage(ThisIsTheLobbyMessage thisIsTheLobby) {
+        userList.clear();
+        userList.addAll(thisIsTheLobby.getUsernames());
     }
 }

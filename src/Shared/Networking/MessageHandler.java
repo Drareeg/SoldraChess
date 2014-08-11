@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Drareeg.
+ * Copyright 2014 Dries Weyme & Geerard Ponnet.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,26 +24,18 @@
 package Shared.Networking;
 
 /**
- * C -> S: I challenge player target
  *
- * @author Drareeg
+ * @author Dries
  */
-public class ChallengeMessage extends Message {
+public interface MessageHandler {
 
-    //the person being challenged
-    private String target;
+    public void handleJoinLobby(JoinLobbyMessage message);
 
-    public ChallengeMessage(String target) {
-        this.target = target;
-    }
+    public void handleChallenge(ChallengeMessage challengeMessage);
 
-    public String getTarget() {
-        return target;
-    }
+    public void handleMove(MoveMessage moveMessage);
 
-    @Override
-    public void handleSelf(MessageHandler m) {
-        m.handleChallenge(this);
-    }
+    public void handleGameStart(GameStartMessage gameStart);
 
+    public void handleThisIsTheLobbyMessage(ThisIsTheLobbyMessage thisIsTheLobby);
 }
