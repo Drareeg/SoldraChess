@@ -64,7 +64,6 @@ class GameController implements Initializable {
     private int selCol;
     private int selRow;
 
-    @FXML
     void clicked(int row, int col) {
         if (!isSomethingSelected) {
             //efkes weg omdat isempty nog niet bestaat.
