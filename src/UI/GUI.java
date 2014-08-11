@@ -25,10 +25,12 @@ package UI;
 
 import java.util.HashMap;
 import java.util.Map;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  *
@@ -50,6 +52,12 @@ public class GUI {
 
     public GUI(Stage stage) {
         this.primaryStage = stage;
+        this.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                System.exit(0);
+            }
+        });
         this.primaryStage.setTitle("SoldraChess");
         try {
             startApp();
