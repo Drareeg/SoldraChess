@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package Shared.Chess;
 
 /**
@@ -30,11 +29,14 @@ package Shared.Chess;
  */
 public abstract class ChessPiece {
     //tijdelijke representatie van een stuk is een letter.
-    public String code;
+    public boolean isWhite;
 
-    public ChessPiece(String code) {
-        this.code = code;
+    public ChessPiece(boolean isWhite) {
+        this.isWhite = isWhite;
     }
-    
-    
+
+    public boolean isWhite() {
+        return isWhite;
+    }
+
 }

@@ -27,9 +27,9 @@ package Shared.Chess;
  *
  * @author Drareeg
  */
-public class Rook extends ChessPiece {
+public class King extends ChessPiece {
 
-    public Rook(boolean isWhite) {
+    public King(boolean isWhite) {
         super(isWhite);
     }
 }

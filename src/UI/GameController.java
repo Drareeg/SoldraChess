@@ -25,24 +25,48 @@ package UI;
 
 import Networking.Client;
 import Shared.Chess.Board;
+import Shared.Chess.ChessPiece;
 import Shared.Networking.MoveMessage;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.GridPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
 /**
  *
  * @author Drareeg
  */
-class GameController implements Initializable {
+class GameController implements Initializable, BoardChangeListener {
+
+    private final static HashMap<String, String> images;
+
+    static {
+        images = new HashMap<>();
+        images.put("RookB", SoldraChess.class.getResource("resources/rook_black.png").toExternalForm());
+        images.put("RookW", SoldraChess.class.getResource("resources/rook_white.png").toExternalForm());
+        images.put("KnightB", SoldraChess.class.getResource("resources/knight_black.png").toExternalForm());
+        images.put("KnightW", SoldraChess.class.getResource("resources/knight_white.png").toExternalForm());
+        images.put("BishopB", SoldraChess.class.getResource("resources/bishop_black.png").toExternalForm());
+        images.put("BishopW", SoldraChess.class.getResource("resources/bishop_white.png").toExternalForm());
+        images.put("QueenB", SoldraChess.class.getResource("resources/queen_black.png").toExternalForm());
+        images.put("QueenW", SoldraChess.class.getResource("resources/queen_white.png").toExternalForm());
+        images.put("KingB", SoldraChess.class.getResource("resources/king_black.png").toExternalForm());
+        images.put("KingW", SoldraChess.class.getResource("resources/king_white.png").toExternalForm());
+        images.put("PawnB", SoldraChess.class.getResource("resources/pawn_black.png").toExternalForm());
+        images.put("PawnW", SoldraChess.class.getResource("resources/pawn_white.png").toExternalForm());
+    }
 
     private Board board;
     private Client client;
+    private ChessFieldPane[][] panes;
 
     @FXML
-    public GridPane boardGrid;
+    AnchorPane anchorPane;
 
     public GameController(Board board, Client client) {
         this.board = board;
@@ -51,11 +75,25 @@ class GameController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 8; c++) {
-                ChessFieldControl cfc = new ChessFieldControl(r, c, this);
-                cfc.setOnMouseClicked(cfc);
-                boardGrid.add(cfc, c, r);
+        panes = new ChessFieldPane[8][8];
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                ChessFieldPane field = new ChessFieldPane();
+                field.setMinSize(100, 100);
+                field.setStyle(((row + col) % 2 == 1) ? "-fx-background-color: black;" : "-fx-background-color: white;");
+                field.setOnMouseClicked(new CoordinateEventHandler(row, col));
+                field.setLayoutX(col * 100);
+                field.setLayoutY(row * 100);
+                anchorPane.getChildren().add(field);
+                panes[row][col] = field;
+            }
+        }
+    }
+
+    public void syncBoardToUI() {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                panes[row][col].setPiece(board.getPiece(row, col));
             }
         }
     }
@@ -65,6 +103,7 @@ class GameController implements Initializable {
     private int selRow;
 
     void clicked(int row, int col) {
+        System.out.println("clicked " + row + ", " + col);
         if (!isSomethingSelected) {
             //efkes weg omdat isempty nog niet bestaat.
             //if(!board.isEmpty(row, col)){
@@ -82,4 +121,43 @@ class GameController implements Initializable {
         }
     }
 
+    @Override
+    public void boardChanged() {
+        this.syncBoardToUI();
+    }
+
+    private static class ChessFieldPane extends Pane {
+        ChessPiece piece;
+
+        public ChessFieldPane() {
+        }
+
+        void setPiece(ChessPiece piece) {
+            this.piece = piece;
+            this.getChildren().clear();
+            if (piece != null) {
+                this.setStyle("-fx-background-image: url('"
+                        + images.get(piece.getClass().getSimpleName() + (piece.isWhite ? "W" : "B"))
+                        + "')");
+            }
+        }
+
+    }
+
+    class CoordinateEventHandler implements EventHandler<MouseEvent> {
+
+        int row;
+        int col;
+
+        private CoordinateEventHandler(int row, int col) {
+            this.row = row;
+            this.col = col;
+        }
+
+        @Override
+        public void handle(MouseEvent event) {
+            clicked(row, col);
+        }
+
+    }
 }

@@ -21,8 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package Shared.Chess;
+import UI.BoardChangeListener;
 
 /**
  *
@@ -30,17 +30,46 @@ package Shared.Chess;
  */
 public class Board {
     private ChessPiece[][] model;
-    
-    public Board(){
+
+    public Board() {
         model = new ChessPiece[8][8];
-        model[0][0] = new Rook();
-        model[0][7] = new Rook();
-        model[7][0] = new Rook();
-        model[7][7] = new Rook();
+        model[0][0] = new Rook(false);
+        model[0][7] = new Rook(false);
+        model[7][0] = new Rook(true);
+        model[7][7] = new Rook(true);
+        model[0][1] = new Knight(false);
+        model[0][6] = new Knight(false);
+        model[7][1] = new Knight(true);
+        model[7][6] = new Knight(true);
+        model[0][2] = new Bishop(false);
+        model[0][5] = new Bishop(false);
+        model[7][2] = new Bishop(true);
+        model[7][5] = new Bishop(true);
+        model[0][3] = new Queen(false);
+        model[7][3] = new Queen(true);
+        model[0][4] = new King(false);
+        model[7][4] = new King(true);
+        for (int i = 0; i < 8; i++) {
+            model[1][i] = new Pawn(false);
+            model[6][i] = new Pawn(true);
+        }
     }
-    
-    public void movePiece(int fromRow,int fromCol,int toRow,int toCol){
+
+    public void movePiece(int fromRow, int fromCol, int toRow, int toCol) {
         model[toRow][toCol] = model[fromRow][fromCol];
         model[fromRow][fromCol] = null;
+        fireChanged();
+    }
+
+    public ChessPiece getPiece(int row, int col) {
+        return model[row][col];
+    }
+
+    BoardChangeListener bcl;
+
+    private void fireChanged() {
+        if (bcl != null) {
+            bcl.boardChanged();
+        }
     }
 }

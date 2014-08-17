@@ -94,7 +94,9 @@ public class DomainEntryPoint implements MessageHandler {
     @Override
     public void handleGameStart(GameStartMessage gameStart) {
         currentBoard = new Board();
-        GUI.setScene(GUI.GAMESCENE, new GameController(currentBoard, client));
+        GameController gameController = new GameController(currentBoard, client);
+        GUI.setScene(GUI.GAMESCENE, gameController);
+        gameController.syncBoardToUI();
     }
 
     @Override
