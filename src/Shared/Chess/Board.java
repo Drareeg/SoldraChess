@@ -86,7 +86,7 @@ public class Board {
         int testR = row;
         int testC = col;
         boolean done = false;
-        while (testR + rdiff > 0 && testR + rdiff < 7 && testC + cdiff > 0 && testC + cdiff < 7 && !done) {
+        while (testR + rdiff >= 0 && testR + rdiff <= 7 && testC + cdiff >= 0 && testC + cdiff <= 7 && !done) {
             testR += rdiff;
             testC += cdiff;
             if (model[testR][testC] != null) {

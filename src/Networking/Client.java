@@ -50,7 +50,7 @@ public class Client {
 
     public void connectWithName(String name) {
         try {
-            connection = new Socket(InetAddress.getLocalHost(), PORT);
+            connection = new Socket(InetAddress.getByName("178.117.61.118"), PORT);
             oos = new ObjectOutputStream(connection.getOutputStream());
             oos.flush();
             ois = new ObjectInputStream(connection.getInputStream());
