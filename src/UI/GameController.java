@@ -70,6 +70,7 @@ class GameController implements Initializable, BoardChangeListener {
 
     public GameController(Board board, Client client) {
         this.board = board;
+        board.setBCL(this);
         this.client = client;
     }
 
@@ -78,9 +79,8 @@ class GameController implements Initializable, BoardChangeListener {
         panes = new ChessFieldPane[8][8];
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                ChessFieldPane field = new ChessFieldPane();
+                ChessFieldPane field = new ChessFieldPane(row, col);
                 field.setMinSize(100, 100);
-                field.setStyle(((row + col) % 2 == 1) ? "-fx-background-color: black;" : "-fx-background-color: white;");
                 field.setOnMouseClicked(new CoordinateEventHandler(row, col));
                 field.setLayoutX(col * 100);
                 field.setLayoutY(row * 100);
@@ -128,17 +128,22 @@ class GameController implements Initializable, BoardChangeListener {
 
     private static class ChessFieldPane extends Pane {
         ChessPiece piece;
+        int row;
+        int col;
 
-        public ChessFieldPane() {
+        public ChessFieldPane(int row, int col) {
+            this.row = row;
+            this.col = col;
         }
 
         void setPiece(ChessPiece piece) {
             this.piece = piece;
             this.getChildren().clear();
+            this.setStyle(((row + col) % 2 == 1) ? "-fx-background-color: black;" : "-fx-background-color: white;");
             if (piece != null) {
                 this.setStyle("-fx-background-image: url('"
                         + images.get(piece.getClass().getSimpleName() + (piece.isWhite ? "W" : "B"))
-                        + "')");
+                        + "'); -fx-background-repeat: no-repeat; -fx-background-position: center center; ");
             }
         }
 

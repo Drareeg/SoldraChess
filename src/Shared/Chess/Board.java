@@ -58,6 +58,11 @@ public class Board {
     public void movePiece(int fromRow, int fromCol, int toRow, int toCol) {
         model[toRow][toCol] = model[fromRow][fromCol];
         model[fromRow][fromCol] = null;
+        //magneetschaak
+        attract(toRow, toCol, 1, 0);
+        attract(toRow, toCol, -1, 0);
+        attract(toRow, toCol, 0, 1);
+        attract(toRow, toCol, 0, -1);
         fireChanged();
     }
 
@@ -70,6 +75,28 @@ public class Board {
     private void fireChanged() {
         if (bcl != null) {
             bcl.boardChanged();
+        }
+    }
+
+    public void setBCL(BoardChangeListener aThis) {
+        this.bcl = aThis;
+    }
+
+    private void attract(int row, int col, int rdiff, int cdiff) {
+        int testR = row;
+        int testC = col;
+        boolean done = false;
+        while (testR + rdiff > 0 && testR + rdiff < 7 && testC + cdiff > 0 && testC + cdiff < 7 && !done) {
+            testR += rdiff;
+            testC += cdiff;
+            if (model[testR][testC] != null) {
+                done = true;
+                //als het ernaast stond willen we het niet verwijderen
+                if (!(testR - row == rdiff && testC - col == cdiff)) {
+                    model[row + rdiff][ col + cdiff] = model[testR][testC];
+                    model[testR][testC] = null;
+                }
+            }
         }
     }
 }
