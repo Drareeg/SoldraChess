@@ -28,6 +28,7 @@ import Shared.Chess.Board;
 import Shared.Networking.ChallengeMessage;
 import Shared.Networking.GameStartMessage;
 import Shared.Networking.JoinLobbyMessage;
+import Shared.Networking.LeaveLobbyMessage;
 import Shared.Networking.Message;
 import Shared.Networking.MessageHandler;
 import Shared.Networking.MoveMessage;
@@ -100,5 +101,10 @@ public class DomainEntryPoint implements MessageHandler {
     public void handleThisIsTheLobbyMessage(ThisIsTheLobbyMessage thisIsTheLobby) {
         userList.clear();
         userList.addAll(thisIsTheLobby.getUsernames());
+    }
+
+    @Override
+    public void handleLeaveLobby(LeaveLobbyMessage leaveLobby) {
+        userList.remove(leaveLobby.getUsername());
     }
 }

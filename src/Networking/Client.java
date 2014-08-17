@@ -42,6 +42,7 @@ public class Client {
     private Socket connection;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
+    private static final int PORT = 8001;
 
     public Client() {
 
@@ -49,7 +50,7 @@ public class Client {
 
     public void connectWithName(String name) {
         try {
-            connection = new Socket(InetAddress.getLocalHost(), 12345);
+            connection = new Socket(InetAddress.getLocalHost(), PORT);
             oos = new ObjectOutputStream(connection.getOutputStream());
             oos.flush();
             ois = new ObjectInputStream(connection.getInputStream());
