@@ -6,9 +6,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <ListView fx:id="userList" prefHeight="373.0" prefWidth="202.0" />
-      <Button fx:id="challengeButton" layoutY="374.0" mnemonicParsing="false" onAction="#challenge" prefHeight="25.0" prefWidth="202.0" text="Challenge" />
-   </children>
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <ListView fx:id="userList" prefHeight="373.0" prefWidth="202.0" />
+    <Button fx:id="challengeButton" layoutY="374.0" mnemonicParsing="false" onAction="#challenge" prefHeight="25.0" prefWidth="202.0" text="Challenge" />
+    <ListView fx:id="chatList" layoutX="202.0" layoutY="0.0" prefHeight="373.0" prefWidth="398.0" />
+    <TextField fx:id="chatField" layoutX="202.0" layoutY="374.0" onAction="#sendChat" prefHeight="27.0" prefWidth="316.0" />
+    <Button fx:id="chatButton" layoutX="516.0" layoutY="373.0" mnemonicParsing="false" onAction="#sendChat" prefHeight="27.0" prefWidth="84.0" text="Send" />
+  </children>
 </AnchorPane>

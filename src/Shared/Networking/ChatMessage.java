@@ -21,12 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package Lobby;
+package Shared.Networking;
 
 /**
  *
- * @author Dries
+ * @author Geerard
  */
-public class LobbyModel {
+public class ChatMessage extends Message {
+
+    private String content;
+    private String originName;
+
+    public ChatMessage(String content, String originName) {
+        this.content = content;
+        this.originName = originName;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getOriginName() {
+        return originName;
+    }
+
+    @Override
+    public void handleSelf(MessageHandler m) {
+        m.handleChatMessage(this);
+    }
 
 }

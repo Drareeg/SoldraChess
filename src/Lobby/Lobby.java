@@ -22,11 +22,61 @@
  * THE SOFTWARE.
  */
 package Lobby;
+import Shared.Networking.ChatMessage;
+import Shared.Networking.JoinLobbyMessage;
+import Shared.Networking.LeaveLobbyMessage;
+import Shared.Networking.ThisIsTheLobbyMessage;
+import java.util.ArrayList;
+import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
  * @author Dries
  */
 public class Lobby {
+
+    private ObservableList<String> chat;
+    private ObservableList<String> userList;
+    private String selfUsername;
+
+    public Lobby() {
+        chat = FXCollections.observableArrayList();
+        userList = FXCollections.observableArrayList();
+    }
+
+    public void handleJoin(JoinLobbyMessage message) {
+        userList.add(message.getUsername());
+    }
+
+    public void handleThisIsTheState(ThisIsTheLobbyMessage thisIsTheLobby) {
+        userList.clear();
+        userList.addAll(thisIsTheLobby.getUsernames());
+    }
+
+    public void handleLeave(LeaveLobbyMessage leaveLobby) {
+        userList.remove(leaveLobby.getUsername());
+    }
+
+    public void handleChat(ChatMessage aThis) {
+        chat.add(aThis.getOriginName() + ": " + aThis.getContent());
+    }
+
+    public ObservableList<String> getChat() {
+        return chat;
+    }
+
+    public ObservableList<String> getUserList() {
+        return userList;
+    }
+
+    public String getSelfUsername() {
+        return selfUsername;
+    }
+
+    public void setSelfName(String text) {
+        this.selfUsername = text;
+    }
 
 }

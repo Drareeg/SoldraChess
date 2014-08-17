@@ -23,9 +23,11 @@
  */
 package UI;
 
+import Lobby.Lobby;
 import Networking.Client;
 import Shared.Chess.Board;
 import Shared.Networking.ChallengeMessage;
+import Shared.Networking.ChatMessage;
 import Shared.Networking.GameStartMessage;
 import Shared.Networking.JoinLobbyMessage;
 import Shared.Networking.LeaveLobbyMessage;
@@ -33,8 +35,6 @@ import Shared.Networking.Message;
 import Shared.Networking.MessageHandler;
 import Shared.Networking.MoveMessage;
 import Shared.Networking.ThisIsTheLobbyMessage;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 /**
  *
@@ -56,16 +56,17 @@ public class DomainEntryPoint implements MessageHandler {
             _instance = new DomainEntryPoint();
         }
         return _instance;
-
     }
+
+    private Lobby lobby;
 
     public DomainEntryPoint() {
-        //hier allerlei domeinobjecten aanmaken (lobby, ...)
-        //tijdelijk lazy en alles gwn hierin gezet ;)
-        userList = FXCollections.observableArrayList();
+        lobby = new Lobby();
     }
 
-    public ObservableList<String> userList;
+    public Lobby getLobby() {
+        return lobby;
+    }
 
     private Board currentBoard;
 
@@ -77,8 +78,7 @@ public class DomainEntryPoint implements MessageHandler {
 
     @Override
     public void handleJoinLobby(JoinLobbyMessage message) {
-        userList.add(((JoinLobbyMessage) message).getUsername());
-        System.out.println("user added to list");
+        lobby.handleJoin(message);
     }
 
     @Override
@@ -99,12 +99,16 @@ public class DomainEntryPoint implements MessageHandler {
 
     @Override
     public void handleThisIsTheLobbyMessage(ThisIsTheLobbyMessage thisIsTheLobby) {
-        userList.clear();
-        userList.addAll(thisIsTheLobby.getUsernames());
+        lobby.handleThisIsTheState(thisIsTheLobby);
     }
 
     @Override
     public void handleLeaveLobby(LeaveLobbyMessage leaveLobby) {
-        userList.remove(leaveLobby.getUsername());
+        lobby.handleLeave(leaveLobby);
+    }
+
+    @Override
+    public void handleChatMessage(ChatMessage aThis) {
+        lobby.handleChat(aThis);
     }
 }

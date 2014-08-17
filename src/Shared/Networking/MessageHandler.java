@@ -22,6 +22,13 @@
  * THE SOFTWARE.
  */
 package Shared.Networking;
+import Shared.Networking.ChallengeMessage;
+import Shared.Networking.ChatMessage;
+import Shared.Networking.GameStartMessage;
+import Shared.Networking.JoinLobbyMessage;
+import Shared.Networking.LeaveLobbyMessage;
+import Shared.Networking.MoveMessage;
+import Shared.Networking.ThisIsTheLobbyMessage;
 
 /**
  *
@@ -40,4 +47,6 @@ public interface MessageHandler {
     public void handleThisIsTheLobbyMessage(ThisIsTheLobbyMessage thisIsTheLobby);
 
     public void handleLeaveLobby(LeaveLobbyMessage leaveLobby);
+
+    public void handleChatMessage(ChatMessage aThis);
 }
