@@ -1,5 +1,3 @@
-package Shared.Networking;
-
 /*
  * The MIT License
  *
@@ -23,26 +21,28 @@ package Shared.Networking;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package Shared.Networking;
+import Shared.Chess.Board;
+
 /**
- * C -> S: C joins with username S -> C: someone joined with username
  *
  * @author Geerard
  */
-public class JoinLobbyMessage extends Message {
+public class ThisIsTheBoardMessage extends Message {
 
-    private String username;
+    private Board board;
 
-    public JoinLobbyMessage(String username) {
-        this.username = username;
-    }
-
-    public String getUsername() {
-        return username;
+    public ThisIsTheBoardMessage(Board currentBoard) {
+        this.board = currentBoard;
     }
 
     @Override
     public void handleSelf(MessageHandler m) {
-        m.handleJoinLobby(this);
+        m.handleThisIsTheBoard(this);
+    }
+
+    public Board getBoard() {
+        return board;
     }
 
 }

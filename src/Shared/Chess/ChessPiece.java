@@ -22,12 +22,13 @@
  * THE SOFTWARE.
  */
 package Shared.Chess;
+import java.io.Serializable;
 
 /**
  *
  * @author Drareeg
  */
-public abstract class ChessPiece {
+public abstract class ChessPiece implements Serializable {
     //tijdelijke representatie van een stuk is een letter.
     public boolean isWhite;
 

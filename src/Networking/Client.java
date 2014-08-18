@@ -45,12 +45,11 @@ public class Client {
     private static final int PORT = 8001;
 
     public Client() {
-
     }
 
     public void connectWithName(String name) {
         try {
-            connection = new Socket(InetAddress.getByName("178.117.61.118"), PORT);
+            connection = new Socket(InetAddress.getLocalHost(), PORT);
             oos = new ObjectOutputStream(connection.getOutputStream());
             oos.flush();
             ois = new ObjectInputStream(connection.getInputStream());

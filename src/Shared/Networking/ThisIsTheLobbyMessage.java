@@ -25,7 +25,6 @@ package Shared.Networking;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * S -> C: these are all the people in the lobby

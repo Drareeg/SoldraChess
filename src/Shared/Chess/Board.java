@@ -23,12 +23,13 @@
  */
 package Shared.Chess;
 import UI.BoardChangeListener;
+import java.io.Serializable;
 
 /**
  *
  * @author Drareeg
  */
-public class Board {
+public class Board implements Serializable {
     private ChessPiece[][] model;
 
     public Board() {
@@ -98,5 +99,10 @@ public class Board {
                 }
             }
         }
+    }
+
+    public void updateTo(Board board) {
+        this.model = board.model;
+        fireChanged();
     }
 }

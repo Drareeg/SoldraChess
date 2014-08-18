@@ -34,6 +34,7 @@ import Shared.Networking.LeaveLobbyMessage;
 import Shared.Networking.Message;
 import Shared.Networking.MessageHandler;
 import Shared.Networking.MoveMessage;
+import Shared.Networking.ThisIsTheBoardMessage;
 import Shared.Networking.ThisIsTheLobbyMessage;
 
 /**
@@ -88,7 +89,8 @@ public class DomainEntryPoint implements MessageHandler {
 
     @Override
     public void handleMove(MoveMessage moveMessage) {
-        currentBoard.movePiece(moveMessage.getFromRow(), moveMessage.getFromCol(), moveMessage.getToRow(), moveMessage.getToCol());
+        throw new UnsupportedOperationException("Gebruik ThisIsTheBoardMessage.");
+        //currentBoard.movePiece(moveMessage.getFromRow(), moveMessage.getFromCol(), moveMessage.getToRow(), moveMessage.getToCol());
     }
 
     @Override
@@ -97,6 +99,11 @@ public class DomainEntryPoint implements MessageHandler {
         GameController gameController = new GameController(currentBoard, client);
         GUI.setScene(GUI.GAMESCENE, gameController);
         gameController.syncBoardToUI();
+    }
+
+    @Override
+    public void handleThisIsTheBoard(ThisIsTheBoardMessage aThis) {
+        currentBoard.updateTo(aThis.getBoard());
     }
 
     @Override
@@ -113,4 +120,5 @@ public class DomainEntryPoint implements MessageHandler {
     public void handleChatMessage(ChatMessage aThis) {
         lobby.handleChat(aThis);
     }
+
 }

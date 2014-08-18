@@ -1,6 +1,5 @@
 package Shared.Networking;
 
-
 /*
  * The MIT License
  *
