@@ -27,6 +27,7 @@ import Networking.Client;
 import Shared.Chess.Board;
 import Shared.Chess.ChessPiece;
 import Shared.Networking.MoveMessage;
+import java.awt.Color;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -36,6 +37,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javax.swing.BorderFactory;
 
 /**
  *
@@ -110,12 +112,14 @@ class GameController implements Initializable, BoardChangeListener {
             isSomethingSelected = true;
             selCol = col;
             selRow = row;
+            panes[selRow][selCol].select().doStyle();
             //}
         } else {
+            isSomethingSelected = false;
+            panes[selRow][selCol].deselect().doStyle();
             if (selRow != row || selCol != col) {
                 //elke illegale zet is nu nog mogelijk
                 //beter ook niet de messages vanaf hier sturen, but yeah, lazy
-                isSomethingSelected = false;
                 client.sendMessage(new MoveMessage(selRow, selCol, row, col));
             }
         }
@@ -130,6 +134,7 @@ class GameController implements Initializable, BoardChangeListener {
         ChessPiece piece;
         int row;
         int col;
+        boolean selected;
 
         public ChessFieldPane(int row, int col) {
             this.row = row;
@@ -138,13 +143,32 @@ class GameController implements Initializable, BoardChangeListener {
 
         void setPiece(ChessPiece piece) {
             this.piece = piece;
-            this.getChildren().clear();
+            doStyle();
+        }
+
+        public void doStyle() {
             this.setStyle(((row + col) % 2 == 1) ? "-fx-background-color: black;" : "-fx-background-color: white;");
             if (piece != null) {
                 this.setStyle("-fx-background-image: url('"
                         + images.get(piece.getClass().getSimpleName() + (piece.isWhite ? "W" : "B"))
                         + "'); -fx-background-repeat: no-repeat; -fx-background-position: center center; ");
             }
+            if (selected) {
+                this.setStyle(this.getStyle() + "-fx-border-color: blue;\n"
+                        + "-fx-border-insets: 5;\n"
+                        + "-fx-border-width: 3;\n"
+                        + "-fx-border-style: dashed;\n");
+            }
+        }
+
+        private ChessFieldPane select() {
+            selected = true;
+            return this;
+        }
+
+        private ChessFieldPane deselect() {
+            selected = false;
+            return this;
         }
 
     }
