@@ -36,6 +36,7 @@ import Shared.Networking.MessageHandler;
 import Shared.Networking.MoveMessage;
 import Shared.Networking.ThisIsTheBoardMessage;
 import Shared.Networking.ThisIsTheLobbyMessage;
+import Shared.Networking.TurnMessage;
 
 /**
  *
@@ -93,12 +94,20 @@ public class DomainEntryPoint implements MessageHandler {
         //currentBoard.movePiece(moveMessage.getFromRow(), moveMessage.getFromCol(), moveMessage.getToRow(), moveMessage.getToCol());
     }
 
+    //best niet bijhouden in een veld (zelf helemaal niet bijhouden). refactoren dat er toch messages aan doorgegeven kunnen worden... (hoeft niet rechtstraaks)
+    GameController gameController;
+
     @Override
     public void handleGameStart(GameStartMessage gameStart) {
         currentBoard = new Board();
-        GameController gameController = new GameController(currentBoard, client);
+        gameController = new GameController(currentBoard, client);
         GUI.setScene(GUI.GAMESCENE, gameController);
         gameController.syncBoardToUI();
+    }
+
+    @Override
+    public void handleTurnMessage(TurnMessage aThis) {
+        gameController.setMyTurn(aThis.isMyTurn());
     }
 
     @Override

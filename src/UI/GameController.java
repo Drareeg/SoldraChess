@@ -27,7 +27,6 @@ import Networking.Client;
 import Shared.Chess.Board;
 import Shared.Chess.ChessPiece;
 import Shared.Networking.MoveMessage;
-import java.awt.Color;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -37,7 +36,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javax.swing.BorderFactory;
 
 /**
  *
@@ -66,6 +64,7 @@ class GameController implements Initializable, BoardChangeListener {
     private Board board;
     private Client client;
     private ChessFieldPane[][] panes;
+    private boolean myTurn = false;
 
     @FXML
     AnchorPane anchorPane;
@@ -105,24 +104,29 @@ class GameController implements Initializable, BoardChangeListener {
     private int selRow;
 
     void clicked(int row, int col) {
-        System.out.println("clicked " + row + ", " + col);
-        if (!isSomethingSelected) {
-            //efkes weg omdat isempty nog niet bestaat.
-            //if(!board.isEmpty(row, col)){
-            isSomethingSelected = true;
-            selCol = col;
-            selRow = row;
-            panes[selRow][selCol].select().doStyle();
-            //}
-        } else {
-            isSomethingSelected = false;
-            panes[selRow][selCol].deselect().doStyle();
-            if (selRow != row || selCol != col) {
-                //elke illegale zet is nu nog mogelijk
-                //beter ook niet de messages vanaf hier sturen, but yeah, lazy
-                client.sendMessage(new MoveMessage(selRow, selCol, row, col));
+        if (myTurn) {
+            if (!isSomethingSelected) {
+                if (panes[row][col].hasAPiece()) {
+                    isSomethingSelected = true;
+                    selCol = col;
+                    selRow = row;
+                    panes[selRow][selCol].select().doStyle();
+                }
+            } else {
+                isSomethingSelected = false;
+                panes[selRow][selCol].deselect().doStyle();
+                if (selRow != row || selCol != col) {
+                    //elke illegale zet is nu nog mogelijk
+                    //beter ook niet de messages vanaf hier sturen, but yeah, lazy
+                    client.sendMessage(new MoveMessage(selRow, selCol, row, col));
+                }
             }
         }
+    }
+
+    public void setMyTurn(boolean myTurn) {
+        System.out.println("Setting myturn to " + myTurn);
+        this.myTurn = myTurn;
     }
 
     @Override
@@ -169,6 +173,10 @@ class GameController implements Initializable, BoardChangeListener {
         private ChessFieldPane deselect() {
             selected = false;
             return this;
+        }
+
+        private boolean hasAPiece() {
+            return piece != null;
         }
 
     }
