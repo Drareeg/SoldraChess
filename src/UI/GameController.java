@@ -26,6 +26,7 @@ package UI;
 import Networking.Client;
 import Shared.Chess.Board;
 import Shared.Chess.ChessPiece;
+import Shared.Chess.Coordinate;
 import Shared.Networking.MoveMessage;
 import java.net.URL;
 import java.util.HashMap;
@@ -94,7 +95,7 @@ class GameController implements Initializable, BoardChangeListener {
     public void syncBoardToUI() {
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                panes[row][col].setPiece(board.getPiece(row, col));
+                panes[row][col].setPiece(board.getPiece(new Coordinate(row, col)));
             }
         }
     }
@@ -118,7 +119,7 @@ class GameController implements Initializable, BoardChangeListener {
                 if (selRow != row || selCol != col) {
                     //elke illegale zet is nu nog mogelijk
                     //beter ook niet de messages vanaf hier sturen, but yeah, lazy
-                    client.sendMessage(new MoveMessage(selRow, selCol, row, col));
+                    client.sendMessage(new MoveMessage(new Coordinate(selRow, selCol), new Coordinate(row, col)));
                 }
             }
         }
