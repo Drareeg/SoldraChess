@@ -34,9 +34,11 @@ import java.util.ResourceBundle;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 
 /**
  *
@@ -60,6 +62,8 @@ class GameController implements Initializable, BoardChangeListener {
         images.put("KingW", SoldraChess.class.getResource("resources/king_white.png").toExternalForm());
         images.put("PawnB", SoldraChess.class.getResource("resources/pawn_black.png").toExternalForm());
         images.put("PawnW", SoldraChess.class.getResource("resources/pawn_white.png").toExternalForm());
+        images.put("FieldB", SoldraChess.class.getResource("resources/field_black.png").toExternalForm());
+        images.put("FieldW", SoldraChess.class.getResource("resources/field_white.png").toExternalForm());
     }
 
     private Board board;
@@ -135,15 +139,19 @@ class GameController implements Initializable, BoardChangeListener {
         this.syncBoardToUI();
     }
 
-    private static class ChessFieldPane extends Pane {
+    private static class ChessFieldPane extends StackPane {
         ChessPiece piece;
         int row;
         int col;
         boolean selected;
 
+        ImageView label;
+
         public ChessFieldPane(int row, int col) {
             this.row = row;
             this.col = col;
+            label = new ImageView();
+            this.getChildren().add(label);
         }
 
         void setPiece(ChessPiece piece) {
@@ -152,11 +160,13 @@ class GameController implements Initializable, BoardChangeListener {
         }
 
         public void doStyle() {
-            this.setStyle(((row + col) % 2 == 1) ? "-fx-background-color: black;" : "-fx-background-color: white;");
+            this.setStyle("-fx-background-image: url('"
+                    + images.get("Field" + ((((row + col) % 2 == 1)) ? "W" : "B"))
+                    + "');");
             if (piece != null) {
-                this.setStyle("-fx-background-image: url('"
-                        + images.get(piece.getClass().getSimpleName() + (piece.isWhite ? "W" : "B"))
-                        + "'); -fx-background-repeat: no-repeat; -fx-background-position: center center; ");
+                label.setImage(new Image(images.get(piece.getClass().getSimpleName() + (piece.isWhite ? "W" : "B"))));
+            } else {
+                label.setImage(null);
             }
             if (selected) {
                 this.setStyle(this.getStyle() + "-fx-border-color: blue;\n"
