@@ -21,44 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package UI;
-
-import Networking.Client;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.TextField;
+package Shared.Other;
+import java.io.Serializable;
 
 /**
  *
- * @author Dries
+ * @author Geerard
  */
-public class MainSceneController implements Initializable {
+public class Challenge implements Serializable {
 
-    private Client client;
+    //met enums ofzo later
+    private int variant;
+    private String origin;
 
-    @FXML
-    public TextField usernameField;
-
-    @FXML
-    public TextField ipField;
-
-    @FXML
-    public void connect(ActionEvent e) {
-        client.connectWithName(usernameField.getText(), ipField.getText());
-        DomainEntryPoint.getInstance().getLobby().setSelfName(usernameField.getText());
-        GUI.setScene(GUI.LOBBYSCENE, new LobbyController(client));
+    public Challenge(int variant, String origin) {
+        this.variant = variant;
+        this.origin = origin;
     }
 
-    public MainSceneController() {
-        client = new Client();
-        DomainEntryPoint.getInstance().setClient(client);
+    public int getVariant() {
+        return variant;
+    }
+
+    public String getOrigin() {
+        return origin;
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public String toString() {
+        return origin + " wants to play " + variant;
     }
 
 }

@@ -26,6 +26,7 @@ package UI;
 import Lobby.Lobby;
 import Networking.Client;
 import Shared.Chess.Board;
+import Shared.Networking.AcceptChallengeMessage;
 import Shared.Networking.ChallengeMessage;
 import Shared.Networking.ChatMessage;
 import Shared.Networking.GameStartMessage;
@@ -85,7 +86,7 @@ public class DomainEntryPoint implements MessageHandler {
 
     @Override
     public void handleChallenge(ChallengeMessage challengeMessage) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        lobby.gotChallenged(challengeMessage);
     }
 
     @Override
@@ -128,6 +129,11 @@ public class DomainEntryPoint implements MessageHandler {
     @Override
     public void handleChatMessage(ChatMessage aThis) {
         lobby.handleChat(aThis);
+    }
+
+    @Override
+    public void handleAcceptChallenge(AcceptChallengeMessage aThis) {
+        throw new UnsupportedOperationException("C -> S message"); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

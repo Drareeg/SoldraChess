@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 package Lobby;
+import Shared.Networking.ChallengeMessage;
 import Shared.Networking.ChatMessage;
 import Shared.Networking.JoinLobbyMessage;
 import Shared.Networking.LeaveLobbyMessage;
 import Shared.Networking.ThisIsTheLobbyMessage;
-import java.util.ArrayList;
-import java.util.List;
+import Shared.Other.Challenge;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -39,11 +39,13 @@ public class Lobby {
 
     private ObservableList<String> chat;
     private ObservableList<String> userList;
+    private ObservableList<Challenge> challengeList;
     private String selfUsername;
 
     public Lobby() {
         chat = FXCollections.observableArrayList();
         userList = FXCollections.observableArrayList();
+        challengeList = FXCollections.observableArrayList();
     }
 
     public void handleJoin(JoinLobbyMessage message) {
@@ -71,12 +73,20 @@ public class Lobby {
         return userList;
     }
 
+    public ObservableList<Challenge> getChallengeList() {
+        return challengeList;
+    }
+
     public String getSelfUsername() {
         return selfUsername;
     }
 
     public void setSelfName(String text) {
         this.selfUsername = text;
+    }
+
+    public void gotChallenged(ChallengeMessage challengeMessage) {
+        challengeList.add(challengeMessage.getChallenge());
     }
 
 }

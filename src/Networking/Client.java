@@ -47,9 +47,13 @@ public class Client {
     public Client() {
     }
 
-    public void connectWithName(String name) {
+    public void connectWithName(String name, String ip) {
         try {
-            connection = new Socket(InetAddress.getLocalHost(), PORT);
+            if (ip.isEmpty()) {
+                connection = new Socket(InetAddress.getLocalHost(), PORT);
+            } else {
+                connection = new Socket(InetAddress.getByName(ip), PORT);
+            }
             oos = new ObjectOutputStream(connection.getOutputStream());
             oos.flush();
             ois = new ObjectInputStream(connection.getInputStream());

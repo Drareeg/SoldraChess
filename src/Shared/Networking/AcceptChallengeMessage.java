@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Dries Weyme & Geerard Ponnet.
+ * Copyright 2014 Drareeg.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,44 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package UI;
-
-import Networking.Client;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.TextField;
+package Shared.Networking;
+import Shared.Other.Challenge;
 
 /**
+ * C -> S: I accept challenge
  *
- * @author Dries
+ * @author Drareeg
  */
-public class MainSceneController implements Initializable {
+public class AcceptChallengeMessage extends Message {
 
-    private Client client;
+    private Challenge challenge;
 
-    @FXML
-    public TextField usernameField;
-
-    @FXML
-    public TextField ipField;
-
-    @FXML
-    public void connect(ActionEvent e) {
-        client.connectWithName(usernameField.getText(), ipField.getText());
-        DomainEntryPoint.getInstance().getLobby().setSelfName(usernameField.getText());
-        GUI.setScene(GUI.LOBBYSCENE, new LobbyController(client));
+    public AcceptChallengeMessage(Challenge challenge) {
+        this.challenge = challenge;
     }
 
-    public MainSceneController() {
-        client = new Client();
-        DomainEntryPoint.getInstance().setClient(client);
+    public Challenge getChallenge() {
+        return challenge;
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void handleSelf(MessageHandler m) {
+        m.handleAcceptChallenge(this);
     }
 
 }

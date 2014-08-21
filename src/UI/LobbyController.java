@@ -24,15 +24,22 @@
 package UI;
 
 import Networking.Client;
+import Shared.Networking.AcceptChallengeMessage;
 import Shared.Networking.ChallengeMessage;
 import Shared.Networking.ChatMessage;
+import Shared.Other.Challenge;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 
 /**
@@ -48,10 +55,16 @@ class LobbyController implements Initializable {
     ListView<String> chatList;
 
     @FXML
+    ListView<Challenge> challengeList;
+
+    @FXML
     TextField chatField;
 
     @FXML
     Button chatButton;
+
+    @FXML
+    Button acceptButton;
 
     DomainEntryPoint dep;
     private Client client;
@@ -59,17 +72,39 @@ class LobbyController implements Initializable {
     public LobbyController(Client client) {
         this.client = client;
     }
+    private int i = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         dep = DomainEntryPoint.getInstance();
         userList.setItems(dep.getLobby().getUserList());
         chatList.setItems(dep.getLobby().getChat());
-    }
+        challengeList.setItems(dep.getLobby().getChallengeList());
+        String[] variants = new String[]{"Attractchess", "1 2 3 chess", "TornadoChess"};
+        Menu challengeMenu = new Menu("Challenge");
+        for (String variant : variants) {
+            MenuItem challengeVariantItem = new MenuItem(variant);
+            challengeVariantItem.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    client.sendMessage(new ChallengeMessage(userList.getSelectionModel().getSelectedItem(), new Challenge(i++, dep.getLobby().getSelfUsername())));
+                }
+            });
+            challengeMenu.getItems().add(challengeVariantItem);
+        }
+        ContextMenu contextMenu = new ContextMenu(challengeMenu);
+        userList.setContextMenu(contextMenu);
+        BooleanBinding acceptButtonBinding = new BooleanBinding() {
+            {
+                super.bind(challengeList.getSelectionModel().getSelectedItems());
+            }
 
-    @FXML
-    public void challenge(ActionEvent e) {
-        client.sendMessage(new ChallengeMessage(userList.getSelectionModel().getSelectedItem()));
+            @Override
+            protected boolean computeValue() {
+                return challengeList.getSelectionModel().isEmpty();
+            }
+        };
+        acceptButton.disableProperty().bind(acceptButtonBinding);
     }
 
     @FXML
@@ -79,4 +114,10 @@ class LobbyController implements Initializable {
             chatField.clear();
         }
     }
+
+    @FXML
+    public void accept(ActionEvent e) {
+        client.sendMessage(new AcceptChallengeMessage(challengeList.getSelectionModel().getSelectedItem()));
+    }
+
 }

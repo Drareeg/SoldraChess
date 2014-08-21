@@ -60,4 +60,5 @@ public class Queen extends ChessPiece {
         possibleMovesListList.add(list7);
         possibleMovesListList.add(list8);
     }
+
 }

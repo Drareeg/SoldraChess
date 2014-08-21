@@ -41,7 +41,7 @@ public class Rook extends ChessPiece {
             list1.add(new Coordinate(1 * i, 0));
             list2.add(new Coordinate(-1 * i, 0));
             list3.add(new Coordinate(0, -1 * i));
-            list4.add(new Coordinate(0, -1 * i));
+            list4.add(new Coordinate(0, 1 * i));
         }
         possibleMovesListList.add(list1);
         possibleMovesListList.add(list2);
