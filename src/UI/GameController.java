@@ -70,14 +70,16 @@ class GameController implements Initializable, BoardChangeListener {
     private Client client;
     private ChessFieldPane[][] panes;
     private boolean myTurn = false;
+    private boolean amIWhite;
 
     @FXML
     AnchorPane anchorPane;
 
-    public GameController(Board board, Client client) {
+    public GameController(Board board, Client client, boolean amIWhite) {
         this.board = board;
         board.setBCL(this);
         this.client = client;
+        this.amIWhite = amIWhite;
     }
 
     @Override
@@ -85,11 +87,16 @@ class GameController implements Initializable, BoardChangeListener {
         panes = new ChessFieldPane[8][8];
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                ChessFieldPane field = new ChessFieldPane(row, col);
-                field.setMinSize(100, 100);
-                field.setOnMouseClicked(new CoordinateEventHandler(row, col));
-                field.setLayoutX(col * 100);
-                field.setLayoutY(row * 100);
+                ChessFieldPane field;
+                if (amIWhite) {
+                    field = new ChessFieldPane(row, col);
+                } else {
+                    field = new ChessFieldPane(7 - row, 7 - col);
+                }
+                field.setMinSize(50, 50);
+                field.setOnMouseClicked(new CoordinateEventHandler(field));
+                field.setLayoutX(col * 50);
+                field.setLayoutY(row * 50);
                 anchorPane.getChildren().add(field);
                 panes[row][col] = field;
             }
@@ -99,32 +106,35 @@ class GameController implements Initializable, BoardChangeListener {
     public void syncBoardToUI() {
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                panes[row][col].setPiece(board.getPiece(new Coordinate(row, col)));
+                if (amIWhite) {
+                    panes[row][col].setPiece(board.getPiece(new Coordinate(row, col)));
+                } else {
+                    panes[7 - row][7 - col].setPiece(board.getPiece(new Coordinate(row, col)));
+                }
             }
         }
     }
 
     private boolean isSomethingSelected;
-    private int selCol;
-    private int selRow;
+    private ChessFieldPane selectedPane;
 
-    void clicked(int row, int col) {
+    void clicked(ChessFieldPane pane) {
         if (myTurn) {
             if (!isSomethingSelected) {
-                if (panes[row][col].hasAPiece()) {
+                ChessPiece clickedPiece = board.getPiece(pane.getCoord());
+                if (clickedPiece != null && clickedPiece.isWhite == amIWhite) {
                     isSomethingSelected = true;
-                    selCol = col;
-                    selRow = row;
-                    panes[selRow][selCol].select().doStyle();
+                    selectedPane = pane;
+                    pane.select().doStyle();
                 }
             } else {
                 isSomethingSelected = false;
-                panes[selRow][selCol].deselect().doStyle();
-                if (selRow != row || selCol != col) {
-                    //elke illegale zet is nu nog mogelijk
-                    //beter ook niet de messages vanaf hier sturen, but yeah, lazy
-                    client.sendMessage(new MoveMessage(new Coordinate(selRow, selCol), new Coordinate(row, col)));
-                }
+                selectedPane.deselect().doStyle();
+                // if (selRow != row || selCol != col) {
+                //elke illegale zet is nu nog mogelijk -> geeft niet, het is de server die controleert en zegt wat de state is na de zet.
+                //beter ook niet de messages vanaf hier sturen, but yeah, lazy
+                client.sendMessage(new MoveMessage(selectedPane.getCoord(), pane.getCoord()));
+                //}
             }
         }
     }
@@ -141,15 +151,13 @@ class GameController implements Initializable, BoardChangeListener {
 
     private static class ChessFieldPane extends StackPane {
         ChessPiece piece;
-        int row;
-        int col;
+        Coordinate coord;
         boolean selected;
 
         ImageView label;
 
         public ChessFieldPane(int row, int col) {
-            this.row = row;
-            this.col = col;
+            this.coord = new Coordinate(row, col);
             label = new ImageView();
             this.getChildren().add(label);
         }
@@ -161,7 +169,7 @@ class GameController implements Initializable, BoardChangeListener {
 
         public void doStyle() {
             this.setStyle("-fx-background-image: url('"
-                    + images.get("Field" + ((((row + col) % 2 == 1)) ? "W" : "B"))
+                    + images.get("Field" + ((((coord.getRow() + coord.getCol()) % 2 == 1)) ? "W" : "B"))
                     + "');");
             if (piece != null) {
                 label.setImage(new Image(images.get(piece.getClass().getSimpleName() + (piece.isWhite ? "W" : "B"))));
@@ -170,7 +178,6 @@ class GameController implements Initializable, BoardChangeListener {
             }
             if (selected) {
                 this.setStyle(this.getStyle() + "-fx-border-color: blue;\n"
-                        + "-fx-border-insets: 5;\n"
                         + "-fx-border-width: 3;\n"
                         + "-fx-border-style: dashed;\n");
             }
@@ -186,25 +193,22 @@ class GameController implements Initializable, BoardChangeListener {
             return this;
         }
 
-        private boolean hasAPiece() {
-            return piece != null;
+        public Coordinate getCoord() {
+            return coord;
         }
 
     }
 
     class CoordinateEventHandler implements EventHandler<MouseEvent> {
+        ChessFieldPane pane;
 
-        int row;
-        int col;
-
-        private CoordinateEventHandler(int row, int col) {
-            this.row = row;
-            this.col = col;
+        private CoordinateEventHandler(ChessFieldPane pane) {
+            this.pane = pane;
         }
 
         @Override
         public void handle(MouseEvent event) {
-            clicked(row, col);
+            clicked(pane);
         }
 
     }

@@ -7,6 +7,6 @@
 <?import javafx.scene.layout.*?>
 
 
-<AnchorPane fx:id="anchorPane" prefHeight="800" prefWidth="800" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="anchorPane" prefHeight="400" prefWidth="400" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 
 </AnchorPane>
