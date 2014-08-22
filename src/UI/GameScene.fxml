@@ -6,7 +6,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane fx:id="anchorPane" prefHeight="400" prefWidth="400" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-
+<AnchorPane id="anchorPane" prefHeight="400.0" prefWidth="608.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <HBox prefHeight="400.0" prefWidth="608.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+        <AnchorPane fx:id="anchorPane" prefHeight="400.0" prefWidth="397.0" />
+        <VBox prefHeight="400.0" prefWidth="211.0">
+          <children>
+            <HBox prefHeight="22.0" prefWidth="211.0">
+              <children>
+                <Label fx:id="player1Label" prefWidth="85.0" text="Label" />
+                <Label prefWidth="28.0" text="vs" />
+                <Label fx:id="player2Label" prefWidth="85.0" text="Label" />
+              </children>
+            </HBox>
+            <Label fx:id="turnLabel" prefWidth="85.0" text="Label" />
+          </children>
+        </VBox>
+      </children>
+    </HBox>
+  </children>
 </AnchorPane>

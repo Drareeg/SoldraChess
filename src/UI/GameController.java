@@ -34,6 +34,7 @@ import java.util.ResourceBundle;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -75,11 +76,29 @@ class GameController implements Initializable, BoardChangeListener {
     @FXML
     AnchorPane anchorPane;
 
-    public GameController(Board board, Client client, boolean amIWhite) {
+    @FXML
+    Label player1Label;
+
+    @FXML
+    Label player2Label;
+
+    @FXML
+    Label turnLabel;
+
+    public GameController(Board board, Client client, boolean amIWhite, String against) {
         this.board = board;
         board.setBCL(this);
         this.client = client;
         this.amIWhite = amIWhite;
+        String me = DomainEntryPoint.getInstance().getLobby().getSelfUsername();
+        if (amIWhite) {
+            player1Label.setText(me);
+            player2Label.setText(against);
+            turnLabel.setText(me);
+        } else {
+            player1Label.setText(against);
+            player2Label.setText(me);
+        }
     }
 
     @Override

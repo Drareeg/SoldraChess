@@ -30,14 +30,20 @@ package Shared.Networking;
  */
 public class GameStartMessage extends Message {
 
-    boolean amIWhite; //
+    boolean amIWhite;
+    String againstName;
 
-    public GameStartMessage(boolean amIWhite) {
+    public GameStartMessage(boolean amIWhite, String againstName) {
         this.amIWhite = amIWhite;
+        this.againstName = againstName;
     }
 
     public boolean AmIWhite() {
         return amIWhite;
+    }
+
+    public String getAgainstName() {
+        return againstName;
     }
 
     @Override
