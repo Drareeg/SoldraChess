@@ -92,12 +92,12 @@ class GameController implements Initializable, BoardChangeListener {
         this.amIWhite = amIWhite;
         String me = DomainEntryPoint.getInstance().getLobby().getSelfUsername();
         if (amIWhite) {
-            player1Label.setText(me);
-            player2Label.setText(against);
-            turnLabel.setText(me);
+//            player1Label.setText(me);
+//            player2Label.setText(against);
+//            turnLabel.setText(me);
         } else {
-            player1Label.setText(against);
-            player2Label.setText(me);
+//            player1Label.setText(against);
+//            player2Label.setText(me);
         }
     }
 
