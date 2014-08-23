@@ -42,7 +42,9 @@ public class Client {
     private Socket connection;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
-    private static final int PORT = 8001;
+    private static final int LOCALPORT = 8000;
+    private static final int POORTVOORMENSENVIAPUBLIEKIP = 8001;
+    private static final int PORT = LOCALPORT;
 
     public Client() {
     }
