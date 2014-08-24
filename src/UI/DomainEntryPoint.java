@@ -29,12 +29,14 @@ import Shared.Chess.Board;
 import Shared.Networking.AcceptChallengeMessage;
 import Shared.Networking.ChallengeMessage;
 import Shared.Networking.ChatMessage;
+import Shared.Networking.GameFinishedMessage;
 import Shared.Networking.GameStartMessage;
 import Shared.Networking.JoinLobbyMessage;
 import Shared.Networking.LeaveLobbyMessage;
 import Shared.Networking.Message;
 import Shared.Networking.MessageHandler;
 import Shared.Networking.MoveMessage;
+import Shared.Networking.SurrenderMessage;
 import Shared.Networking.ThisIsTheBoardMessage;
 import Shared.Networking.ThisIsTheLobbyMessage;
 import Shared.Networking.TurnMessage;
@@ -134,6 +136,16 @@ public class DomainEntryPoint implements MessageHandler {
     @Override
     public void handleAcceptChallenge(AcceptChallengeMessage aThis) {
         throw new UnsupportedOperationException("C -> S message"); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void handleGameFinished(GameFinishedMessage aThis) {
+        gameController.gameFinished(aThis);
+    }
+
+    @Override
+    public void handleSurrender(SurrenderMessage aThis) {
+        throw new UnsupportedOperationException("enkel voor server"); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

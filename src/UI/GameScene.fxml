@@ -21,6 +21,17 @@
               </children>
             </HBox>
             <Label fx:id="turnLabel" prefWidth="85.0" text="Label" />
+            <Label fx:id="finishedLabel" prefHeight="30.0" prefWidth="211.0" text="Label" visible="false" />
+            <Button fx:id="finishedButton" mnemonicParsing="false" onAction="#backToLobby" prefWidth="105.0" text="Back to lobby" visible="false" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+              <children>
+                <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                  <children>
+                    <Button id="finishedButton" fx:id="surrenderButton" alignment="TOP_RIGHT" contentDisplay="RIGHT" layoutX="67.0" layoutY="40.0" mnemonicParsing="false" onAction="#surrender" text="Surrender" visible="true" />
+                  </children>
+                </AnchorPane>
+              </children>
+            </HBox>
           </children>
         </VBox>
       </children>

@@ -27,19 +27,26 @@ import Networking.Client;
 import Shared.Chess.Board;
 import Shared.Chess.ChessPiece;
 import Shared.Chess.Coordinate;
+import Shared.Networking.GameFinishedMessage;
 import Shared.Networking.MoveMessage;
+import Shared.Networking.SurrenderMessage;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialog;
+import org.controlsfx.dialog.Dialogs;
 
 /**
  *
@@ -84,6 +91,14 @@ class GameController implements Initializable, BoardChangeListener {
 
     @FXML
     Label turnLabel;
+
+    @FXML
+    Button finishedButton;
+
+    @FXML
+    Label finishedLabel;
+    @FXML
+    Button surrenderButton;
 
     public GameController(Board board, Client client, boolean amIWhite, String against) {
         this.board = board;
@@ -166,6 +181,31 @@ class GameController implements Initializable, BoardChangeListener {
     @Override
     public void boardChanged() {
         this.syncBoardToUI();
+    }
+
+    void gameFinished(GameFinishedMessage aThis) {
+        finishedButton.setVisible(true);
+        finishedLabel.setVisible(true);
+        finishedLabel.setText("GAME FINISHED result: " + aThis.getResult());
+        surrenderButton.setVisible(false);
+    }
+
+    @FXML
+    public void backToLobby(ActionEvent e) {
+        GUI.setScene(GUI.LOBBYSCENE, new LobbyController(client));
+    }
+
+    @FXML
+    public void surrender(ActionEvent e) {
+        Action response = Dialogs.create()
+                .owner(null)
+                .title(null)
+                .message("Surrender?")
+                .showConfirm();
+        if (response == Dialog.Actions.YES) {
+            client.sendMessage(new SurrenderMessage());
+            GUI.setScene(GUI.LOBBYSCENE, new LobbyController(client));
+        }
     }
 
     private static class ChessFieldPane extends StackPane {
