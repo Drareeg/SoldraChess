@@ -56,7 +56,7 @@ public class Pawn extends ChessPiece {
         testCoord = fromCoord.add(twoForward);
         if (board.containsCoordinate(testCoord)) {
             boolean tweeVakkenErvoorLeeg = !board.hasPiece(testCoord);
-            if (!hasMoved && toCoord.equals(testCoord) && vakErvoorLeeg && tweeVakkenErvoorLeeg && fromCoord.getRow() == 1 || fromCoord.getRow() == 6) {
+            if (!hasMoved && toCoord.equals(testCoord) && vakErvoorLeeg && tweeVakkenErvoorLeeg && (fromCoord.getRow() == 1 || fromCoord.getRow() == 6)) {
                 return true;
             }
         }
@@ -95,6 +95,9 @@ public class Pawn extends ChessPiece {
             if (board.hasPiece(testCoord)) {
                 attackedPieces.add(board.getPiece(testCoord));
             }
+        }
+        if (!attackedPieces.isEmpty()) {
+            System.out.println("Pion valt " + attackedPieces.size() + " stukken aan");
         }
         return attackedPieces;
     }
