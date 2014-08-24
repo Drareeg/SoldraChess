@@ -22,8 +22,10 @@
  * THE SOFTWARE.
  */
 package Shared.Chess;
+import static Shared.Chess.ChessPiece.images;
 import Shared.Chess.Variants.Board;
 import java.util.ArrayList;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -104,5 +106,10 @@ public class Pawn extends ChessPiece {
             System.out.println("Pion op " + pieceLocation.toString() + " valt " + attackedPieces.size() + " stukken aan");
         }
         return attackedPieces;
+    }
+
+    @Override
+    public Image getImage(boolean amIWhite) {
+        return new Image(images.get("Pawn" + (this.isWhite ? "W" : "B")));
     }
 }

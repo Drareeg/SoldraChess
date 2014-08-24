@@ -22,6 +22,9 @@
  * THE SOFTWARE.
  */
 package Shared.Chess.Variants;
+import Shared.Chess.HiddenQueen;
+import Shared.Networking.Message;
+import Shared.Networking.ThisIsMyHiddenQueenMessage;
 
 /**
  *
@@ -29,4 +32,11 @@ package Shared.Chess.Variants;
  */
 public class HiddenQueenBoard extends Board {
 
+    @Override
+    public void handleCustomMessage(Message message) {
+        if (message instanceof ThisIsMyHiddenQueenMessage) {
+            ThisIsMyHiddenQueenMessage qMessage = (ThisIsMyHiddenQueenMessage) message;
+            model[qMessage.isSentByWhite() ? 6 : 1][qMessage.getCol()] = new HiddenQueen(qMessage.isSentByWhite());
+        }
+    }
 }

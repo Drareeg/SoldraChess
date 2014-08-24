@@ -30,6 +30,7 @@ import Shared.Chess.Variants.Board;
 import Shared.Networking.GameFinishedMessage;
 import Shared.Networking.MoveMessage;
 import Shared.Networking.SurrenderMessage;
+import Shared.Networking.ThisIsMyHiddenQueenMessage;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -39,7 +40,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -53,26 +53,6 @@ import org.controlsfx.dialog.Dialogs;
  * @author Drareeg
  */
 class GameController implements Initializable, BoardChangeListener {
-
-    private final static HashMap<String, String> images;
-
-    static {
-        images = new HashMap<>();
-        images.put("RookB", SoldraChess.class.getResource("resources/rook_black.png").toExternalForm());
-        images.put("RookW", SoldraChess.class.getResource("resources/rook_white.png").toExternalForm());
-        images.put("KnightB", SoldraChess.class.getResource("resources/knight_black.png").toExternalForm());
-        images.put("KnightW", SoldraChess.class.getResource("resources/knight_white.png").toExternalForm());
-        images.put("BishopB", SoldraChess.class.getResource("resources/bishop_black.png").toExternalForm());
-        images.put("BishopW", SoldraChess.class.getResource("resources/bishop_white.png").toExternalForm());
-        images.put("QueenB", SoldraChess.class.getResource("resources/queen_black.png").toExternalForm());
-        images.put("QueenW", SoldraChess.class.getResource("resources/queen_white.png").toExternalForm());
-        images.put("KingB", SoldraChess.class.getResource("resources/king_black.png").toExternalForm());
-        images.put("KingW", SoldraChess.class.getResource("resources/king_white.png").toExternalForm());
-        images.put("PawnB", SoldraChess.class.getResource("resources/pawn_black.png").toExternalForm());
-        images.put("PawnW", SoldraChess.class.getResource("resources/pawn_white.png").toExternalForm());
-        images.put("FieldB", SoldraChess.class.getResource("resources/field_black.png").toExternalForm());
-        images.put("FieldW", SoldraChess.class.getResource("resources/field_white.png").toExternalForm());
-    }
 
     private Board board;
     private Client client;
@@ -99,6 +79,13 @@ class GameController implements Initializable, BoardChangeListener {
     Label finishedLabel;
     @FXML
     Button surrenderButton;
+    private final static HashMap<String, String> images;
+
+    static {
+        images = new HashMap<>();
+        images.put("FieldB", SoldraChess.class.getResource("resources/field_black.png").toExternalForm());
+        images.put("FieldW", SoldraChess.class.getResource("resources/field_white.png").toExternalForm());
+    }
 
     public GameController(Board board, Client client, boolean amIWhite, String against) {
         this.board = board;
@@ -114,6 +101,7 @@ class GameController implements Initializable, BoardChangeListener {
 //            player1Label.setText(against);
 //            player2Label.setText(me);
         }
+        client.sendMessage(new ThisIsMyHiddenQueenMessage(3, amIWhite));
     }
 
     @Override
@@ -208,7 +196,7 @@ class GameController implements Initializable, BoardChangeListener {
         }
     }
 
-    private static class ChessFieldPane extends StackPane {
+    private class ChessFieldPane extends StackPane {
         ChessPiece piece;
         Coordinate coord;
         boolean selected;
@@ -231,7 +219,7 @@ class GameController implements Initializable, BoardChangeListener {
                     + images.get("Field" + ((((coord.getRow() + coord.getCol()) % 2 == 1)) ? "W" : "B"))
                     + "');");
             if (piece != null) {
-                label.setImage(new Image(images.get(piece.getClass().getSimpleName() + (piece.isWhite ? "W" : "B"))));
+                label.setImage(piece.getImage(amIWhite));
             } else {
                 label.setImage(null);
             }

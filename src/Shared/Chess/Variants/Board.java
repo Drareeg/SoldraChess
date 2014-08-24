@@ -30,6 +30,7 @@ import Shared.Chess.Knight;
 import Shared.Chess.Pawn;
 import Shared.Chess.Queen;
 import Shared.Chess.Rook;
+import Shared.Networking.Message;
 import UI.BoardChangeListener;
 import java.io.Serializable;
 
@@ -176,6 +177,10 @@ public class Board implements Serializable {
 
     //in normale schaak is er geen actie na een zet
     public void postMove(Coordinate fromCoord, Coordinate toCoord) {
+    }
+
+    //sommige schaakvarianten moeten kunnen reageren op messages, bv verborgen dame op de keuze van de dame.
+    public void handleCustomMessage(Message message) {
     }
 
 }

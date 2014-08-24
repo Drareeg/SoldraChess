@@ -52,4 +52,6 @@ public interface MessageHandler {
     public void handleGameFinished(GameFinishedMessage aThis);
 
     public void handleSurrender(SurrenderMessage aThis);
+
+    public void handleThisIsMyHiddenQueenMessage(ThisIsMyHiddenQueenMessage aThis);
 }

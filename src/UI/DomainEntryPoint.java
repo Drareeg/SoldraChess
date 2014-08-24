@@ -37,6 +37,7 @@ import Shared.Networking.Message;
 import Shared.Networking.MessageHandler;
 import Shared.Networking.MoveMessage;
 import Shared.Networking.SurrenderMessage;
+import Shared.Networking.ThisIsMyHiddenQueenMessage;
 import Shared.Networking.ThisIsTheBoardMessage;
 import Shared.Networking.ThisIsTheLobbyMessage;
 import Shared.Networking.TurnMessage;
@@ -146,6 +147,11 @@ public class DomainEntryPoint implements MessageHandler {
     @Override
     public void handleSurrender(SurrenderMessage aThis) {
         throw new UnsupportedOperationException("enkel voor server"); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void handleThisIsMyHiddenQueenMessage(ThisIsMyHiddenQueenMessage aThis) {
+        throw new UnsupportedOperationException("voor server"); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
