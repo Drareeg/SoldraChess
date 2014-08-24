@@ -134,4 +134,13 @@ public abstract class ChessPiece implements Serializable {
         images.put("Undercover", SoldraChess.class.getResource("resources/undercover.png").toExternalForm());
     }
 
+    public void executeMove(Coordinate fromCoord, Coordinate toCoord, Board b) {
+        int fromRow = fromCoord.getRow();
+        int fromCol = fromCoord.getCol();
+        int toRow = toCoord.getRow();
+        int toCol = toCoord.getCol();
+        b.getModel()[toRow][toCol] = b.getModel()[fromRow][fromCol];
+        b.getModel()[fromRow][fromCol] = null;
+    }
+
 }

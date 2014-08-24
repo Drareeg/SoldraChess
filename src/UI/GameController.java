@@ -27,6 +27,7 @@ import Networking.Client;
 import Shared.Chess.ChessPiece;
 import Shared.Chess.Coordinate;
 import Shared.Chess.Variants.Board;
+import Shared.Chess.Variants.HiddenQueenBoard;
 import Shared.Networking.GameFinishedMessage;
 import Shared.Networking.MoveMessage;
 import Shared.Networking.SurrenderMessage;
@@ -101,7 +102,6 @@ class GameController implements Initializable, BoardChangeListener {
 //            player1Label.setText(against);
 //            player2Label.setText(me);
         }
-        client.sendMessage(new ThisIsMyHiddenQueenMessage(3, amIWhite));
     }
 
     @Override
@@ -141,6 +141,12 @@ class GameController implements Initializable, BoardChangeListener {
     private ChessFieldPane selectedPane;
 
     void clicked(ChessFieldPane pane) {
+        if (board instanceof HiddenQueenBoard) {
+            if (!((HiddenQueenBoard) board).hasChosenQueen(amIWhite)) {
+                client.sendMessage(new ThisIsMyHiddenQueenMessage(pane.coord.getCol(), amIWhite));
+                return;
+            }
+        }
         if (myTurn) {
             if (!isSomethingSelected) {
                 ChessPiece clickedPiece = board.getPiece(pane.getCoord());
