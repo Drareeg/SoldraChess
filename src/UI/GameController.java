@@ -24,9 +24,9 @@
 package UI;
 
 import Networking.Client;
-import Shared.Chess.Board;
 import Shared.Chess.ChessPiece;
 import Shared.Chess.Coordinate;
+import Shared.Chess.Variants.Board;
 import Shared.Networking.GameFinishedMessage;
 import Shared.Networking.MoveMessage;
 import Shared.Networking.SurrenderMessage;

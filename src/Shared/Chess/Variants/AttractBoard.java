@@ -21,35 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package Shared.Other;
-import Shared.Chess.Variants.Variant;
-import java.io.Serializable;
+package Shared.Chess.Variants;
+import Shared.Chess.Coordinate;
 
 /**
  *
  * @author Geerard
  */
-public class Challenge implements Serializable {
-
-    private Variant variant;
-    private String origin;
-
-    public Challenge(Variant variant, String origin) {
-        this.variant = variant;
-        this.origin = origin;
-    }
-
-    public Variant getVariant() {
-        return variant;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
+public class AttractBoard extends Board {
     @Override
-    public String toString() {
-        return origin + " wants to play " + variant.getName();
+    public void postMove(Coordinate fromCoord, Coordinate toCoord) {
+        attract(toCoord, 1, 0);
+        attract(toCoord, -1, 0);
+        attract(toCoord, 0, 1);
+        attract(toCoord, 0, -1);
     }
 
+    private void attract(Coordinate origin, int rdiff, int cdiff) {
+        int row = origin.getRow();
+        int col = origin.getCol();
+        int testR = row;
+        int testC = col;
+        boolean done = false;
+        while (testR + rdiff >= 0 && testR + rdiff <= 7 && testC + cdiff >= 0 && testC + cdiff <= 7 && !done) {
+            testR += rdiff;
+            testC += cdiff;
+            if (model[testR][testC] != null) {
+                done = true;
+                //als het ernaast stond willen we het niet verwijderen
+                if (!(testR - row == rdiff && testC - col == cdiff)) {
+                    model[row + rdiff][ col + cdiff] = model[testR][testC];
+                    model[testR][testC] = null;
+                }
+            }
+        }
+    }
 }

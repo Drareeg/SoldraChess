@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 package Shared.Chess;
+import Shared.Chess.Variants.Board;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public abstract class ChessPiece implements Serializable {
         return this.isWhite == piece.isWhite;
     }
 
-    boolean canMoveFromTo(Coordinate fromCoord, Coordinate toCoord, Board board) {
+    public boolean canMoveFromTo(Coordinate fromCoord, Coordinate toCoord, Board board) {
         for (List<Coordinate> coordList : possibleMovesListList) {
             for (Coordinate diffCoord : coordList) {
                 Coordinate testCoord = diffCoord.add(fromCoord);
@@ -77,7 +78,7 @@ public abstract class ChessPiece implements Serializable {
         return false; //return checkspecialstuff() voor rokade en en passant en pion first move
     }
 
-    ArrayList<ChessPiece> getAttackedPieces(Board board, Coordinate pieceLocation) {
+    public ArrayList<ChessPiece> getAttackedPieces(Board board, Coordinate pieceLocation) {
         ArrayList<ChessPiece> attackedPieces = new ArrayList();
         for (List<Coordinate> coordList : possibleMovesListList) {
             for (Coordinate diffCoord : coordList) {
@@ -94,7 +95,7 @@ public abstract class ChessPiece implements Serializable {
     }
 
     //kan wel wa efficienter ;)
-    ArrayList<Coordinate> getReachableCoords(Coordinate pieceLocation, Board board) {
+    public ArrayList<Coordinate> getReachableCoords(Coordinate pieceLocation, Board board) {
         ArrayList<Coordinate> reachableFields = new ArrayList();
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {

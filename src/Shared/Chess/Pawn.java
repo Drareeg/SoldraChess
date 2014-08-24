@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 package Shared.Chess;
+import Shared.Chess.Variants.Board;
 import java.util.ArrayList;
 
 /**
@@ -45,7 +46,7 @@ public class Pawn extends ChessPiece {
     }
 
     @Override
-    boolean canMoveFromTo(Coordinate fromCoord, Coordinate toCoord, Board board) {
+    public boolean canMoveFromTo(Coordinate fromCoord, Coordinate toCoord, Board board) {
         //vakje ervoor & leeg
         Coordinate testCoord = fromCoord.add(forward);
         boolean vakErvoorLeeg = !board.hasPiece(testCoord);
@@ -82,7 +83,7 @@ public class Pawn extends ChessPiece {
     }
 
     @Override
-    ArrayList<ChessPiece> getAttackedPieces(Board board, Coordinate pieceLocation) {
+    public ArrayList<ChessPiece> getAttackedPieces(Board board, Coordinate pieceLocation) {
         if (pieceLocation.getRow() == 4) {
             forward = forward;
         }

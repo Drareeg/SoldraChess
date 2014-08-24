@@ -21,35 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package Shared.Other;
-import Shared.Chess.Variants.Variant;
-import java.io.Serializable;
+package Shared.Chess.Variants;
+import Shared.Chess.ChessPiece;
+import Shared.Chess.Coordinate;
 
 /**
  *
  * @author Geerard
  */
-public class Challenge implements Serializable {
-
-    private Variant variant;
-    private String origin;
-
-    public Challenge(Variant variant, String origin) {
-        this.variant = variant;
-        this.origin = origin;
-    }
-
-    public Variant getVariant() {
-        return variant;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
+public class TornadoBoard extends Board {
     @Override
-    public String toString() {
-        return origin + " wants to play " + variant.getName();
+    public void postMove(Coordinate fromCoord, Coordinate toCoord) {
+        tornado();
     }
 
+    private void tornado() {
+        ChessPiece temp = model[3][3];
+        model[3][3] = model[4][3];
+        model[4][3] = model[4][4];
+        model[4][4] = model[3][4];
+        model[3][4] = temp;
+    }
 }

@@ -24,6 +24,7 @@
 package UI;
 
 import Networking.Client;
+import Shared.Chess.Variants.Variant;
 import Shared.Networking.AcceptChallengeMessage;
 import Shared.Networking.ChallengeMessage;
 import Shared.Networking.ChatMessage;
@@ -82,12 +83,12 @@ class LobbyController implements Initializable {
         challengeList.setItems(dep.getLobby().getChallengeList());
         String[] variants = new String[]{"Attractchess", "1 2 3 chess", "TornadoChess"};
         Menu challengeMenu = new Menu("Challenge");
-        for (String variant : variants) {
-            MenuItem challengeVariantItem = new MenuItem(variant);
+        for (Variant variant : Variant.values()) {
+            MenuItem challengeVariantItem = new MenuItem(variant.getName());
             challengeVariantItem.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    client.sendMessage(new ChallengeMessage(userList.getSelectionModel().getSelectedItem(), new Challenge(i++, dep.getLobby().getSelfUsername())));
+                    client.sendMessage(new ChallengeMessage(userList.getSelectionModel().getSelectedItem(), new Challenge(variant, dep.getLobby().getSelfUsername())));
                 }
             });
             challengeMenu.getItems().add(challengeVariantItem);

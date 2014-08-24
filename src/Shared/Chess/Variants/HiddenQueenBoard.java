@@ -21,35 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package Shared.Other;
-import Shared.Chess.Variants.Variant;
-import java.io.Serializable;
+package Shared.Chess.Variants;
 
 /**
  *
  * @author Geerard
  */
-public class Challenge implements Serializable {
-
-    private Variant variant;
-    private String origin;
-
-    public Challenge(Variant variant, String origin) {
-        this.variant = variant;
-        this.origin = origin;
-    }
-
-    public Variant getVariant() {
-        return variant;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    @Override
-    public String toString() {
-        return origin + " wants to play " + variant.getName();
-    }
+public class HiddenQueenBoard extends Board {
 
 }
