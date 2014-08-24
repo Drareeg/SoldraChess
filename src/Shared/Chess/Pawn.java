@@ -83,21 +83,24 @@ public class Pawn extends ChessPiece {
 
     @Override
     ArrayList<ChessPiece> getAttackedPieces(Board board, Coordinate pieceLocation) {
+        if (pieceLocation.getRow() == 4) {
+            forward = forward;
+        }
         ArrayList<ChessPiece> attackedPieces = new ArrayList();
-        Coordinate testCoord = leftFront.add(pieceLocation);
+        Coordinate testCoord = rightFront.add(pieceLocation);
         if (board.containsCoordinate(testCoord)) {
             if (board.hasPiece(testCoord)) {
                 attackedPieces.add(board.getPiece(testCoord));
             }
         }
-        testCoord = rightFront.add(pieceLocation);
+        testCoord = leftFront.add(pieceLocation);
         if (board.containsCoordinate(testCoord)) {
             if (board.hasPiece(testCoord)) {
                 attackedPieces.add(board.getPiece(testCoord));
             }
         }
         if (!attackedPieces.isEmpty()) {
-            System.out.println("Pion valt " + attackedPieces.size() + " stukken aan");
+            System.out.println("Pion op " + pieceLocation.toString() + " valt " + attackedPieces.size() + " stukken aan");
         }
         return attackedPieces;
     }
