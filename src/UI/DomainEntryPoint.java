@@ -25,11 +25,8 @@ package UI;
 
 import Lobby.Lobby;
 import Networking.Client;
-import Shared.Chess.Variants.AttractBoard;
-import Shared.Chess.Variants.Board;
-import Shared.Chess.Variants.HiddenQueenBoard;
-import Shared.Chess.Variants.TornadoBoard;
-import Shared.Chess.Variants.Variant;
+import Shared.Chess.Board;
+import Shared.Chess.Variant;
 import Shared.Networking.AcceptChallengeMessage;
 import Shared.Networking.ChallengeMessage;
 import Shared.Networking.ChatMessage;
@@ -78,8 +75,6 @@ public class DomainEntryPoint implements MessageHandler {
         return lobby;
     }
 
-    private Board currentBoard;
-
     //voorlopig alles op de javafx thread, want der zitten paar dingen tussen die de gui veranderen
     //later betere oplossing vinden.
     public void handleMessage(Message message) {
@@ -107,21 +102,8 @@ public class DomainEntryPoint implements MessageHandler {
 
     @Override
     public void handleGameStart(GameStartMessage gameStart) {
-        if (gameStart.getVariant().equals(Variant.ATTRACT)) {
-            currentBoard = new AttractBoard();
-        }
-        if (gameStart.getVariant().equals(Variant.HIDDENQUEEN)) {
-            currentBoard = new HiddenQueenBoard();
-        }
-        if (gameStart.getVariant().equals(Variant.TORNADO)) {
-            currentBoard = new TornadoBoard();
-        }
-        if (gameStart.getVariant().equals(Variant.CLASSIC)) {
-            currentBoard = new Board();
-        }
-        gameController = new GameController(currentBoard, client, gameStart.AmIWhite(), gameStart.getAgainstName());
+        gameController = new GameController(client, gameStart.AmIWhite(), gameStart.getAgainstName());
         GUI.setScene(GUI.GAMESCENE, gameController);
-        gameController.syncBoardToUI();
     }
 
     @Override
@@ -131,7 +113,7 @@ public class DomainEntryPoint implements MessageHandler {
 
     @Override
     public void handleThisIsTheBoard(ThisIsTheBoardMessage aThis) {
-        currentBoard.updateTo(aThis.getBoard());
+        gameController.handleThisIsTheBoard(aThis.getBoard());
     }
 
     @Override

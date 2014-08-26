@@ -24,10 +24,9 @@
 package UI;
 
 import Networking.Client;
+import Shared.Chess.Board;
 import Shared.Chess.ChessPiece;
 import Shared.Chess.Coordinate;
-import Shared.Chess.Variants.Board;
-import Shared.Chess.Variants.HiddenQueenBoard;
 import Shared.Networking.GameFinishedMessage;
 import Shared.Networking.MoveMessage;
 import Shared.Networking.SurrenderMessage;
@@ -53,7 +52,7 @@ import org.controlsfx.dialog.Dialogs;
  *
  * @author Drareeg
  */
-class GameController implements Initializable, BoardChangeListener {
+class GameController implements Initializable {
 
     private Board board;
     private Client client;
@@ -88,9 +87,7 @@ class GameController implements Initializable, BoardChangeListener {
         images.put("FieldW", SoldraChess.class.getResource("resources/field_white.png").toExternalForm());
     }
 
-    public GameController(Board board, Client client, boolean amIWhite, String against) {
-        this.board = board;
-        board.setBCL(this);
+    public GameController(Client client, boolean amIWhite, String against) {
         this.client = client;
         this.amIWhite = amIWhite;
         String me = DomainEntryPoint.getInstance().getLobby().getSelfUsername();
@@ -141,12 +138,13 @@ class GameController implements Initializable, BoardChangeListener {
     private ChessFieldPane selectedPane;
 
     void clicked(ChessFieldPane pane) {
-        if (board instanceof HiddenQueenBoard) {
-            if (!((HiddenQueenBoard) board).hasChosenQueen(amIWhite)) {
-                client.sendMessage(new ThisIsMyHiddenQueenMessage(pane.coord.getCol(), amIWhite));
-                return;
-            }
-        }
+        //gamecontroller subklassen om dit op te lossen?
+//        if (board instanceof HiddenQueenBoard) {
+//            if (!((HiddenQueenBoard) board).hasChosenQueen(amIWhite)) {
+//                client.sendMessage(new ThisIsMyHiddenQueenMessage(pane.coord.getCol(), amIWhite));
+//                return;
+//            }
+//        }
         if (myTurn) {
             if (!isSomethingSelected) {
                 ChessPiece clickedPiece = board.getPiece(pane.getCoord());
@@ -170,11 +168,6 @@ class GameController implements Initializable, BoardChangeListener {
     public void setMyTurn(boolean myTurn) {
         System.out.println("Setting myturn to " + myTurn);
         this.myTurn = myTurn;
-    }
-
-    @Override
-    public void boardChanged() {
-        this.syncBoardToUI();
     }
 
     void gameFinished(GameFinishedMessage aThis) {
@@ -202,6 +195,11 @@ class GameController implements Initializable, BoardChangeListener {
         }
     }
 
+    void handleThisIsTheBoard(Board board) {
+        this.board = board;
+        syncBoardToUI();
+    }
+
     private class ChessFieldPane extends StackPane {
         ChessPiece piece;
         Coordinate coord;
@@ -222,7 +220,7 @@ class GameController implements Initializable, BoardChangeListener {
 
         public void doStyle() {
             this.setStyle("-fx-background-image: url('"
-                    + images.get("Field" + ((((coord.getRow() + coord.getCol()) % 2 == 1)) ? "W" : "B"))
+                    + images.get("Field" + ((((coord.getRow() + coord.getCol()) % 2 == 1)) ? "B" : "W"))
                     + "');");
             if (piece != null) {
                 label.setImage(piece.getImage(amIWhite));

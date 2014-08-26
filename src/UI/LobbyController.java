@@ -24,7 +24,7 @@
 package UI;
 
 import Networking.Client;
-import Shared.Chess.Variants.Variant;
+import Shared.Chess.Variant;
 import Shared.Networking.AcceptChallengeMessage;
 import Shared.Networking.ChallengeMessage;
 import Shared.Networking.ChatMessage;
